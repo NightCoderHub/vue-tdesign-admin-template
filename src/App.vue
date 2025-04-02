@@ -1,7 +1,3 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
   <div>
     <a href="https://vite.dev" target="_blank">
@@ -11,8 +7,16 @@ import HelloWorld from './components/HelloWorld.vue'
       <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
     </a>
   </div>
+
   <HelloWorld msg="Vite + Vue" />
+  <HelloWorld msg="Vite + Vue"></HelloWorld>
+  <div />
+  <div />
 </template>
+<script></script>
+<script setup>
+import HelloWorld from "./components/HelloWorld.vue";
+</script>
 
 <style scoped>
 .logo {
