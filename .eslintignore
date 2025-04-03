@@ -1,0 +1,9 @@
+snapshot*
+dist
+lib
+es
+esm
+node_modules
+static
+static/
+!.prettierrc.js
