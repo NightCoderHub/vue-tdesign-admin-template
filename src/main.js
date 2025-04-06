@@ -6,6 +6,7 @@ import router from "./router";
 import "tdesign-vue-next/es/style/index.css";
 import TDesign from "tdesign-vue-next";
 import "./permission";
+import "@/style/index.scss";
 
 const app = createApp(App);
 app.use(TDesign);
