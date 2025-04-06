@@ -21,6 +21,7 @@ export default defineConfig([
         "error",
         { order: ["template", "script:not([setup])", "script[setup]", "style:not([scoped])", "style[scoped]"] },
       ],
+      "vue/multi-word-component-names": 0,
     },
   },
   eslintPluginPrettierRecommended,
