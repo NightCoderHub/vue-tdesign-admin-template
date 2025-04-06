@@ -3,7 +3,7 @@
     <router-view />
   </div>
 </template>
-<style scoped>
+<style lang="scss" scoped>
 .tdesign-wrapper {
   height: 100vh;
   display: flex;
