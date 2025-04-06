@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import router, { fixedRouterList, homepageRouterList } from "@/router";
-import { store } from "@/store";
 import { transformObjectToRoute } from "@/utils/route";
 import { getMenuList } from "@/api/permission";
 
@@ -45,7 +44,3 @@ export const usePermissionStore = defineStore("permission", {
     },
   },
 });
-
-export function getPermissionStore() {
-  return usePermissionStore(store);
-}
