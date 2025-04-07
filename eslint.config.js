@@ -26,4 +26,13 @@ export default defineConfig([
     },
   },
   eslintPluginPrettierRecommended,
+  {
+    ignores: [
+      "dist/**", // 忽略 dist 目录及其内容
+      "node_modules/**", // 忽略 node_modules 目录及其内容
+      "static/**", // 忽略 static 目录及其内容
+      "components.d.ts", // 忽略 components.d.ts 文件
+      "!**/.prettierrc.js", // 排除 .prettierrc.js 文件（不忽略）
+    ],
+  },
 ]);
