@@ -9,9 +9,6 @@ import {
   PARENT_LAYOUT,
 } from "@/utils/route/constant";
 
-// vite 3+ support dynamic import from node_modules
-// const iconsPath = import.meta.glob('../../../node_modules/tdesign-icons-vue-next/esm/components/*.js');
-
 const LayoutMap = new Map();
 
 LayoutMap.set("LAYOUT", LAYOUT);
@@ -19,13 +16,6 @@ LayoutMap.set("BLANK", BLANK_LAYOUT);
 LayoutMap.set("IFRAME", IFRAME);
 
 let dynamicViewsModules;
-
-// 动态从包内引入单个Icon
-// async function getMenuIcon(iconName) {
-//   // const RenderIcon = iconsPath[`../../../node_modules/tdesign-icons-vue-next/esm/components/${iconName}.js`];
-//   // const Icon = await RenderIcon();
-//   // return shallowRef(Icon.default);
-// }
 
 // 动态引入路由组件
 function asyncImportRoute(routes) {
@@ -46,8 +36,6 @@ function asyncImportRoute(routes) {
     } else if (name) {
       item.component = PARENT_LAYOUT();
     }
-
-    // if (item.meta.icon) item.meta.icon = await getMenuIcon(item.meta.icon);
 
     children && asyncImportRoute(children);
   });
@@ -97,7 +85,6 @@ export function transformObjectToRoute(routeList) {
     }
 
     route.children && asyncImportRoute(route.children);
-    // if (route.meta.icon) route.meta.icon = await getMenuIcon(route.meta.icon);
   });
 
   return [PAGE_NOT_FOUND_ROUTE, ...routeList];

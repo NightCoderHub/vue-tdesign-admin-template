@@ -104,7 +104,7 @@ const handleRemove = (options) => {
 
 const renderTitle = (title) => {
   if (typeof title === "string") return title;
-  else return "";
+  return title["zh_CN"];
 };
 
 const handleRefresh = (route, routeIdx) => {

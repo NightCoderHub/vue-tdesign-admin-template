@@ -3,21 +3,15 @@
     <template v-for="item in list" :key="item.path">
       <template v-if="!item.children || !item.children.length || item.meta?.single">
         <t-menu-item v-if="getHref(item)" :name="item.path" :value="getPath(item)" @click="openHref(getHref(item)[0])">
-          <template #icon>
-            <!-- <component :is="menuIcon(item)" class="t-icon"></component> -->
-          </template>
           {{ renderMenuTitle(item.title) }}
         </t-menu-item>
         <t-menu-item v-else :name="item.path" :value="getPath(item)" :to="item.path">
-          <template #icon>
-            <!-- <component :is="menuIcon(item)" class="t-icon"></component> -->
-          </template>
           {{ renderMenuTitle(item.title) }}
         </t-menu-item>
       </template>
       <t-submenu v-else :name="item.path" :value="item.path" :title="renderMenuTitle(item.title)">
         <template #icon>
-          <!-- <component :is="menuIcon(item)" class="t-icon"></component> -->
+          <iconify-icon :icon="'tdesign:' + item.icon" class="t-icon" />
         </template>
         <menu-content v-if="item.children" :nav-data="item.children" />
       </t-submenu>
@@ -27,6 +21,8 @@
 <script setup>
 import { computed } from "vue";
 import { getActive } from "@/router";
+import { useRoute } from "vue-router";
+import { Icon as IconifyIcon } from "@iconify/vue";
 
 const props = defineProps({
   navData: {
@@ -35,7 +31,8 @@ const props = defineProps({
   },
 });
 
-const active = computed(() => getActive());
+const route = useRoute();
+const active = computed(() => getActive(route));
 
 const list = computed(() => {
   const { navData } = props;

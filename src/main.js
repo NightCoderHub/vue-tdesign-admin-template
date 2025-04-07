@@ -7,6 +7,9 @@ import "tdesign-vue-next/es/style/index.css";
 import TDesign from "tdesign-vue-next";
 import "./permission";
 import "@/style/index.scss";
+import { addCollection } from "@iconify/vue";
+import { icons } from "@iconify-json/tdesign";
+addCollection(icons);
 
 const app = createApp(App);
 app.use(TDesign);

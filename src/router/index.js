@@ -1,5 +1,5 @@
 import uniq from "lodash/uniq";
-import { createRouter, createWebHistory, useRoute } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 
 // 导入homepage相关固定路由
 const homepageModules = import.meta.glob("./modules/**/homepage.js", { eager: true });
@@ -56,9 +56,7 @@ export const getRoutesExpanded = () => {
   return uniq(expandedRoutes);
 };
 
-export const getActive = (maxLevel = 3) => {
-  const route = useRoute();
-
+export const getActive = (route, maxLevel = 3) => {
   if (!route.path) {
     return "";
   }

@@ -26,6 +26,8 @@ const crumbs = computed(() => {
     if (meta?.title) {
       if (typeof meta.title === "string") {
         title = meta.title;
+      } else {
+        title = meta.title["zh_CN"];
       }
     }
     breadcrumbArray.push({

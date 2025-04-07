@@ -33,28 +33,27 @@
               <t-icon name="help-circle" />
             </t-button>
           </t-tooltip>
-          <t-dropdown trigger="click">
-            <t-button theme="default" shape="square" variant="text">
-              <translate-icon />
-            </t-button>
-          </t-dropdown>
           <t-dropdown :min-column-width="120" trigger="click">
             <template #dropdown>
               <t-dropdown-menu>
                 <t-dropdown-item class="operations-dropdown-container-item" @click="handleNav('/user/index')">
-                  <user-circle-icon />个人中心
+                  <iconify-icon icon="tdesign:user-circle" class="t-icon" />
+                  个人中心
                 </t-dropdown-item>
                 <t-dropdown-item class="operations-dropdown-container-item" @click="handleLogout">
-                  <poweroff-icon />退出登录
+                  <iconify-icon icon="tdesign:poweroff" class="t-icon" />
+                  退出登录
                 </t-dropdown-item>
               </t-dropdown-menu>
             </template>
             <t-button class="header-user-btn" theme="default" variant="text">
               <template #icon>
-                <t-icon class="header-user-avatar" name="user-circle" />
+                <iconify-icon icon="tdesign:user-circle" class="t-icon" />
               </template>
               <div class="header-user-account">{{ user.userInfo.name }}</div>
-              <template #suffix><chevron-down-icon /></template>
+              <template #suffix>
+                <iconify-icon icon="tdesign:chevron-down" class="t-icon" />
+              </template>
             </t-button>
           </t-dropdown>
         </div>
@@ -64,9 +63,9 @@
 </template>
 
 <script setup>
-import { ChevronDownIcon, PoweroffIcon, TranslateIcon, UserCircleIcon } from "tdesign-icons-vue-next";
 import { computed } from "vue";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
+import { Icon as IconifyIcon } from "@iconify/vue";
 
 import LogoFull from "@/assets/assets-logo-full.svg?component";
 import { prefix } from "@/config/global";
@@ -112,7 +111,8 @@ const router = useRouter();
 const settingStore = useSettingStore();
 const user = useUserStore();
 
-const active = computed(() => getActive());
+const route = useRoute();
+const active = computed(() => getActive(route));
 
 const layoutCls = computed(() => [`${prefix}-header-layout`]);
 
