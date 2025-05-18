@@ -8,8 +8,6 @@
 <script setup>
 import debounce from "lodash/debounce";
 import { computed, ref, unref, watch, useTemplateRef } from "vue";
-
-import { prefix } from "@/config/global";
 import { useWindowSizeFn } from "@/hooks/event/useWindowSizeFn";
 import { useSettingStore } from "@/store";
 
@@ -20,7 +18,7 @@ defineProps({
 const loading = ref(true);
 const heightRef = ref(window.innerHeight);
 const frameRef = useTemplateRef();
-const prefixCls = computed(() => [`${prefix}-iframe-page`]);
+const prefixCls = `iframe-page`;
 const settingStore = useSettingStore();
 
 const getWrapStyle = computed(() => {
@@ -77,7 +75,7 @@ watch(
 );
 </script>
 <style lang="scss" scoped>
-.#{$starter-prefix}-iframe-page {
+.iframe-page {
   &__mask {
     position: absolute;
     top: 0;

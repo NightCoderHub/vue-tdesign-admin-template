@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "prepare": "husky",
-    "lint:fix": "eslint --ext .vue,.js,jsx,.ts,.tsx ./ --max-warnings 0 --fix",
+    "lint:fix": "eslint --ext .vue,.js,jsx ./ --max-warnings 0 --fix",
     "commit": "cz",
     "release": "standard-version",
     "release:minor": "standard-version --release-as minor",
@@ -46,6 +46,7 @@
     "eslint-plugin-vue": "^10.0.0",
     "globals": "^16.0.0",
     "husky": "^9.1.7",
+    "less": "^4.3.0",
     "lint-staged": "^15.5.0",
     "prettier": "^3.5.3",
     "sass": "^1.86.2",
@@ -53,7 +54,7 @@
     "vite": "^6.2.0"
   },
   "lint-staged": {
-    "*.{js,jsx,vue,ts,tsx}": [
+    "*.{js,jsx,vue}": [
       "pnpm lint:fix"
     ]
   },

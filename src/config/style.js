@@ -4,7 +4,7 @@ export default {
   showBreadcrumb: false,
   mode: "light",
   layout: "side",
-  splitMenu: false,
+  splitMenu: true,
   isFooterAside: false,
   isSidebarFixed: true,
   isHeaderFixed: true,

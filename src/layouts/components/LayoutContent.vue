@@ -1,10 +1,10 @@
 <template>
-  <t-layout :class="`${prefix}-layout`">
+  <t-layout class="layout">
     <t-tabs
       v-if="settingStore.isUseTabsRouter"
       drag-sort
       theme="card"
-      :class="`${prefix}-layout-tabs-nav`"
+      class="layout-tabs-nav"
       :value="$route.path"
       :style="{ position: 'sticky', top: 0, width: '100%' }"
       @change="handleChangeCurrentTab"
@@ -59,11 +59,11 @@
         </template>
       </t-tab-panel>
     </t-tabs>
-    <t-content :class="`${prefix}-content-layout`">
+    <t-content class="content-layout">
       <l-breadcrumb v-if="settingStore.showBreadcrumb" />
       <l-content />
     </t-content>
-    <t-footer v-if="settingStore.showFooter" :class="`${prefix}-footer-layout`">
+    <t-footer v-if="settingStore.showFooter" class="footer-layout">
       <l-footer />
     </t-footer>
   </t-layout>
@@ -73,7 +73,6 @@
 import { computed, nextTick, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import { prefix } from "@/config/global";
 import { useSettingStore, useTabsRouterStore } from "@/store";
 
 import LBreadcrumb from "./Breadcrumb.vue";

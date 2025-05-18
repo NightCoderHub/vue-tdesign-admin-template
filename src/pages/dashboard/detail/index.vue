@@ -1,8 +1,14 @@
 <template>
   <div class="dashboard-base">
-    base
+    detail
     <!-- -->
     <h1 class="dashboard-base-h1">标题</h1>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
   </div>
 </template>
 
@@ -12,6 +18,10 @@
 .dashboard-base {
   &-h1 {
     color: red;
+  }
+  div {
+    height: 400px;
+    background-color: aliceblue;
   }
 }
 </style>

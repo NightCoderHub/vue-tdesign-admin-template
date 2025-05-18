@@ -1,5 +1,5 @@
 <template>
-  <div :class="layoutCls">
+  <div class="header-layout">
     <t-head-menu :class="menuCls" :theme="menuTheme" expand-type="popup" :value="active">
       <template #logo>
         <span v-if="showLogo" class="header-logo-container" @click="handleNav('/dashboard/base')">
@@ -68,7 +68,6 @@ import { useRouter, useRoute } from "vue-router";
 import { Icon as IconifyIcon } from "@iconify/vue";
 
 import LogoFull from "@/assets/assets-logo-full.svg?component";
-import { prefix } from "@/config/global";
 import { getActive } from "@/router";
 import { useSettingStore, useUserStore } from "@/store";
 
@@ -114,16 +113,14 @@ const user = useUserStore();
 const route = useRoute();
 const active = computed(() => getActive(route));
 
-const layoutCls = computed(() => [`${prefix}-header-layout`]);
-
 const menuCls = computed(() => {
   const { isFixed, layout, isCompact } = props;
   return [
     {
-      [`${prefix}-header-menu`]: !isFixed,
-      [`${prefix}-header-menu-fixed`]: isFixed,
-      [`${prefix}-header-menu-fixed-side`]: layout === "side" && isFixed,
-      [`${prefix}-header-menu-fixed-side-compact`]: layout === "side" && isFixed && isCompact,
+      [`header-menu`]: !isFixed,
+      [`header-menu-fixed`]: isFixed,
+      [`header-menu-fixed-side`]: layout === "side" && isFixed,
+      [`header-menu-fixed-side-compact`]: layout === "side" && isFixed && isCompact,
     },
   ];
 });
@@ -165,7 +162,7 @@ const navToHelper = () => {
 
 <!-- eslint-disable-next-line vue-scoped-css/enforce-style-type -->
 <style lang="scss" scoped>
-.#{$starter-prefix}-header {
+.header {
   &-menu-fixed {
     position: fixed;
     top: 0;
@@ -222,7 +219,6 @@ const navToHelper = () => {
   display: flex;
   align-items: normal;
   line-height: 0;
-  padding-left: var(--td-comp-margin-xl);
 }
 
 .header-logo-container {

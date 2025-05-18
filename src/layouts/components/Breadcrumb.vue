@@ -9,10 +9,8 @@
 <script setup>
 import { computed } from "vue";
 import { useRoute } from "vue-router";
-
+const route = useRoute();
 const crumbs = computed(() => {
-  const route = useRoute();
-
   const pathArray = route.path.split("/");
   pathArray.shift();
 
