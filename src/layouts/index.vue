@@ -152,7 +152,7 @@ watch(
 }
 
 .footer-layout {
-  padding: 0;
+  padding: 0 !important;
   margin-bottom: var(--td-comp-margin-xxl);
 }
 

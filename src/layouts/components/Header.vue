@@ -197,6 +197,10 @@ const navToHelper = () => {
 
   :deep(.t-menu__item) {
     min-width: unset;
+    gap: 0;
+    .t-fake-arrow {
+      margin-left: var(--td-comp-margin-m);
+    }
   }
 }
 
