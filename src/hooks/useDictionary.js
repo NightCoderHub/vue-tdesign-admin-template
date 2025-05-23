@@ -1,6 +1,6 @@
 // 数据字典自定义Hook
 import { ref, computed, onMounted, watch } from "vue";
-import { useDictionaryStore } from "@/store/modules/dictionary";
+import { useDictionaryStore } from "@/store";
 
 /**
  * 数据字典Hook，用于在组件中方便地使用数据字典
