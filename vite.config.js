@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 import svgLoader from "vite-svg-loader";
 import viteCompression from "vite-plugin-compression";
 import VueDevTools from "vite-plugin-vue-devtools";
+import { viteMockServe } from "vite-plugin-mock";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -21,6 +22,10 @@ export default defineConfig({
       ext: ".gz", // 压缩后的文件扩展名
       deleteOriginFile: false, // 是否删除原文件
       threshold: 10240, // 只处理大于此大小的资源（单位：字节）
+    }),
+    viteMockServe({
+      mockPath: "mock", // 指定mock文件存放目录
+      enabled: true, // 开发环境启用
     }),
   ],
   resolve: {

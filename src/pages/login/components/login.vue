@@ -1,8 +1,8 @@
 <template>
   <div class="item-container">
     <t-form ref="formRef" :data="formData" label-width="0" :rule="FORM_RULES" @submit="onSubmit">
-      <t-form-item name="account">
-        <t-input v-model="formData.account" size="large" placeholder="请输入账号">
+      <t-form-item name="username">
+        <t-input v-model="formData.username" size="large" placeholder="请输入账号">
           <template #prefix-icon>
             <t-icon name="user" />
           </template>
@@ -49,7 +49,7 @@ const userStore = useUserStore();
 
 const INITIAL_DATA = {
   phone: "",
-  account: "admin",
+  username: "admin",
   password: "admin",
   verifyCode: "",
   checked: false,
@@ -57,7 +57,7 @@ const INITIAL_DATA = {
 
 const FORM_RULES = {
   phone: [{ required: true, message: "手机号必填", type: "error" }],
-  account: [{ required: true, message: "账号必填", type: "error" }],
+  username: [{ required: true, message: "账号必填", type: "error" }],
   password: [{ required: true, message: "密码必填", type: "error" }],
   verifyCode: [{ required: true, message: "验证码必填", type: "error" }],
 };
@@ -72,12 +72,12 @@ const onSubmit = async (ctx) => {
   if (ctx.validateResult === true) {
     try {
       await userStore.login(formData.value);
-
       MessagePlugin.success("登录成功");
       const redirect = route.query.redirect;
       const redirectUrl = redirect ? decodeURIComponent(redirect) : "/dashboard";
       router.push(redirectUrl);
     } catch (e) {
+      console.log("e :>> ", e);
       MessagePlugin.error(e.message);
     }
   }

@@ -4,7 +4,6 @@ import merge from "lodash/merge";
 
 import { ContentTypeEnum } from "@/constants";
 import { useUserStore } from "@/store";
-import { getToken, refreshToken, subscribeTokenRefresh } from "@/utils/auth";
 
 import { VAxios } from "./Axios";
 import { formatRequestDate, joinTimestamp, setObjToUrlParams } from "./utils";
@@ -110,14 +109,14 @@ const transform = {
   },
 
   // 请求拦截器处理
-  requestInterceptors: (config, options) => {
+  // config  options
+  requestInterceptors: (config) => {
     // 请求之前处理config
     const userStore = useUserStore();
-    const token = userStore.token || getToken();
-
+    const { token, authenticationScheme } = userStore.token;
     if (token && config?.requestOptions?.withToken !== false) {
       // jwt token
-      config.headers.Authorization = options.authenticationScheme ? `${options.authenticationScheme} ${token}` : token;
+      config.headers.Authorization = authenticationScheme ? `${authenticationScheme} ${token}` : token;
     }
     return config;
   },
@@ -129,32 +128,7 @@ const transform = {
 
   // 响应错误处理
   responseInterceptorsCatch: async (error, instance) => {
-    const { config, response } = error;
-
-    // 处理401未授权错误，尝试刷新token
-    if (response?.status === 401) {
-      const userStore = useUserStore();
-
-      // 创建一个Promise，用于在token刷新后重试请求
-      const retryOriginalRequest = new Promise((resolve) => {
-        subscribeTokenRefresh((token) => {
-          // 更新请求头中的token
-          config.headers.Authorization = token;
-          resolve(instance(config));
-        });
-      });
-
-      try {
-        // 尝试刷新token
-        await refreshToken();
-        return retryOriginalRequest;
-      } catch (refreshError) {
-        // 刷新token失败，清除token并跳转到登录页
-        userStore.logout();
-        window.location.href = "/login";
-        return Promise.reject(refreshError);
-      }
-    }
+    const { config } = error;
 
     // 处理其他错误或重试逻辑
     if (!config || !config.requestOptions.retry) return Promise.reject(error);
@@ -179,9 +153,6 @@ function createAxios(opt) {
   return new VAxios(
     merge(
       {
-        // https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#authentication_schemes
-        // 例如: authenticationScheme: 'Bearer'
-        authenticationScheme: "Bearer",
         // 超时
         timeout: 10 * 1000,
         // 携带Cookie
@@ -195,7 +166,7 @@ function createAxios(opt) {
           // 接口地址
           apiUrl: host,
           // 是否自动添加接口前缀
-          isJoinPrefix: true,
+          isJoinPrefix: false,
           // 接口前缀
           // 例如: https://www.baidu.com/api
           // urlPrefix: '/api'
@@ -209,7 +180,7 @@ function createAxios(opt) {
           // 格式化提交参数时间
           formatDate: true,
           // 是否加入时间戳
-          joinTime: true,
+          joinTime: false,
           // 是否忽略请求取消令牌
           // 如果启用，则重复请求时不进行处理
           // 如果禁用，则重复请求时会取消当前请求

@@ -50,7 +50,7 @@
               <template #icon>
                 <iconify-icon icon="tdesign:user-circle" class="t-icon" />
               </template>
-              <div class="header-user-account">{{ user.userInfo.name }}</div>
+              <div class="header-user-account">{{ user.userInfo?.name }}</div>
               <template #suffix>
                 <iconify-icon icon="tdesign:chevron-down" class="t-icon" />
               </template>

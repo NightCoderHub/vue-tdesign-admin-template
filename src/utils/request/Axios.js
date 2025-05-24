@@ -203,7 +203,6 @@ export class VAxios {
    */
   request(config, options) {
     const { requestOptions } = this.options;
-
     if (requestOptions.throttle !== undefined && requestOptions.debounce !== undefined) {
       throw new Error("throttle and debounce cannot be set at the same time");
     }
@@ -232,9 +231,7 @@ export class VAxios {
     const transform = this.getTransform();
 
     const { requestOptions } = this.options;
-
     const opt = { ...requestOptions, ...options };
-
     const { beforeRequestHook, requestCatchHook, transformRequestHook } = transform || {};
     if (beforeRequestHook && isFunction(beforeRequestHook)) {
       conf = beforeRequestHook(conf, opt);

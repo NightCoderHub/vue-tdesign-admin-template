@@ -7,7 +7,6 @@ const fetchDictionaryData = (dictType) => {
   return new Promise((resolve) => {
     // 模拟网络请求延迟
     setTimeout(() => {
-      console.log("1 :>> ", 1);
       // 从本地常量中获取字典数据
       // 实际项目中，这里应该是从后端API获取数据
       const dictData = DICTIONARY_MAPS[dictType] || [];
@@ -160,16 +159,7 @@ export const useDictionaryStore = defineStore("dictionary", {
   },
 
   // 持久化配置
-  persist: {
-    enabled: true,
-    strategies: [
-      {
-        key: "dictionary-store",
-        storage: localStorage,
-        paths: ["dictionaries", "lastUpdateTime"],
-      },
-    ],
-  },
+  persist: true,
 });
 
 // 导出默认值

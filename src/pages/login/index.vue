@@ -25,14 +25,13 @@ export default {
 </script>
 <script setup>
 import { ref } from "vue";
-
-import Login from "./components/login.vue";
-import Register from "./components/register.vue";
-
+import login from "./components/login.vue";
+import register from "./components/register.vue";
 const type = ref("login");
-const switchType = (val) => {
-  type.value = val;
-};
+
+function switchType(type) {
+  type.value = type;
+}
 </script>
 <style lang="scss" scoped>
 @use "./index.scss";

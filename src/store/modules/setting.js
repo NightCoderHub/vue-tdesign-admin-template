@@ -1,4 +1,3 @@
-import keys from "lodash/keys";
 import { defineStore } from "pinia";
 import { Color } from "tvision-color";
 
@@ -84,7 +83,7 @@ export const useSettingStore = defineStore("setting", {
     },
   },
   persist: {
-    paths: [...keys(STYLE_CONFIG), "colorList", "chartColors"],
+    omit: ["showSettingPanel"],
   },
 });
 
