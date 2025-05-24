@@ -10,8 +10,6 @@ export function getTokenApi(data) {
     {
       url: "/oauth2/token", // 对应mock接口路径
       data, // 传递用户名和密码到请求体
-      // 若需要其他请求头（如Content-Type），可在此添加
-      // headers: { "Content-Type": "application/x-www-form-urlencoded" }
     },
     {
       withToken: false, // 不携带token，因为这是获取token的接口
@@ -25,16 +23,10 @@ export function getTokenApi(data) {
  * @returns {Promise} 新的token请求结果（包含access_token、refresh_token等）
  */
 export function refreshTokenApi(data) {
-  return request.post(
-    {
-      url: "/oauth2/refresh-token", // 对应mock接口路径
-      data, // 传递refresh_token到请求体
-    },
-    {
-      withToken: false, // 不携带当前access_token，因为这是刷新token的接口
-      isTransformResponse: false,
-    },
-  );
+  return request.post({
+    url: "/oauth2/refresh-token", // 对应mock接口路径
+    data, // 传递refresh_token到请求体
+  });
 }
 /**
  * 获取用户基本信息

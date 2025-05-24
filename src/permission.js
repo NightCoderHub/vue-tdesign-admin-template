@@ -1,11 +1,10 @@
 import "nprogress/nprogress.css"; // progress bar style
-
 import NProgress from "nprogress"; // progress bar
 import { MessagePlugin } from "tdesign-vue-next";
-
 import router from "@/router";
 import { usePermissionStore, useUserStore } from "@/store";
 import { PAGE_NOT_FOUND_ROUTE } from "@/utils/route/constant";
+import { isTokenExpired } from "@/utils/auth";
 
 NProgress.configure({ showSpinner: false });
 
@@ -13,13 +12,26 @@ router.beforeEach(async (to, from, next) => {
   NProgress.start();
   const permissionStore = usePermissionStore();
   const { whiteListRouters } = permissionStore;
-
   const userStore = useUserStore();
 
   if (userStore.token) {
     if (to.path === "/login") {
       next();
       return;
+    }
+    // 在跳转前检测token状态，避免用户进入过期状态的受限页面
+    if (isTokenExpired(userStore.token)) {
+      try {
+        await userStore.refreshToken(); // 触发刷新
+        next(to.path); // 刷新成功后继续跳转
+        return;
+      } catch (error) {
+        MessagePlugin.error(error.message);
+        MessagePlugin.error("登录状态已过期，请重新登录");
+        next({ path: "/login" });
+        NProgress.done();
+        return;
+      }
     }
     try {
       if (!userStore.userInfo || Object.keys(userStore.userInfo).length === 0) {

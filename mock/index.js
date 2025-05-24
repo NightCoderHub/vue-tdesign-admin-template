@@ -1,5 +1,33 @@
 import Mock from "mockjs";
+function base64url(source) {
+  let encoded = btoa(JSON.stringify(source));
+  return encoded.replace(/=+$/, "").replace(/\+/g, "-").replace(/\//g, "_");
+}
 
+function generateMockJWT(payload) {
+  const header = {
+    alg: "HS256",
+    typ: "JWT",
+  };
+
+  const encodedHeader = base64url(header);
+  const encodedPayload = base64url(payload);
+
+  // 注意：这只是模拟，没有真正的签名验证
+  const signature = "mock-signature";
+
+  return `${encodedHeader}.${encodedPayload}.${signature}`;
+}
+
+// 使用示例
+const mockPayload = {
+  sub: "1234567890",
+  name: "John Doe",
+  iat: Math.floor(Date.now() / 1000),
+  exp: Math.floor(Date.now() / 1000) + 3600,
+};
+
+const mockToken = generateMockJWT(mockPayload);
 // 导出mock接口配置数组
 export default [
   {
@@ -40,11 +68,39 @@ export default [
         code: 0,
         message: "登录成功",
         data: {
-          access_token: Mock.mock('@string("lower", 32)'), // 32位小写随机字符串
+          access_token: mockToken, // jwt token
           expires: Date.now() + 3600 * 1000, // 1小时后过期（毫秒级时间戳）
           refresh_expires: Date.now() + 86400 * 1000, // 24小时后过期（毫秒级时间戳）
           refresh_token: Mock.mock('@string("lower", 32)'), // 刷新token
           token_type: "Bearer", // 令牌类型
+        },
+      };
+    },
+  },
+  {
+    url: "/oauth2/token-fail",
+    method: "post",
+    response: (req) => {
+      const { username } = req.body;
+
+      // 模拟失败条件（例如用户名包含"error"）
+      if (username?.includes("error")) {
+        return {
+          code: 401, // 自定义错误码（非0）
+          message: "用户名或密码错误（模拟失败场景）",
+          data: null, // 失败时data为空
+        };
+      }
+
+      // 其他情况返回成功（可选）
+      return {
+        code: 0,
+        message: "登录成功（模拟正常场景）",
+        data: {
+          access_token: mockToken,
+          expires: Date.now() + 3600 * 1000,
+          refresh_token: Mock.mock('@string("lower", 32)'),
+          token_type: "Bearer",
         },
       };
     },

@@ -113,10 +113,10 @@ const transform = {
   requestInterceptors: (config) => {
     // 请求之前处理config
     const userStore = useUserStore();
-    const { token, authenticationScheme } = userStore.token;
+    const { token, tokenType } = userStore;
     if (token && config?.requestOptions?.withToken !== false) {
       // jwt token
-      config.headers.Authorization = authenticationScheme ? `${authenticationScheme} ${token}` : token;
+      config.headers.Authorization = tokenType ? `${tokenType} ${token}` : token;
     }
     return config;
   },
@@ -128,8 +128,24 @@ const transform = {
 
   // 响应错误处理
   responseInterceptorsCatch: async (error, instance) => {
-    const { config } = error;
-
+    const { config, response } = error;
+    // 处理401未授权错误（token过期）
+    if (response?.status === 401) {
+      const userStore = useUserStore();
+      if (!userStore.isRefreshing) {
+        return userStore.refreshToken().then((newToken) => {
+          config.headers.Authorization = `${userStore.tokenType} ${newToken}`;
+          return instance(config); // 重试原请求
+        });
+      }
+      // 如果正在刷新，等待刷新完成后重试
+      return new Promise((resolve) => {
+        userStore.refreshSubscribers.push((newToken) => {
+          config.headers.Authorization = `${userStore.tokenType} ${newToken}`;
+          resolve(instance(config));
+        });
+      });
+    }
     // 处理其他错误或重试逻辑
     if (!config || !config.requestOptions.retry) return Promise.reject(error);
 
