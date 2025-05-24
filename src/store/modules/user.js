@@ -1,5 +1,7 @@
 import { defineStore } from "pinia";
+
 import { usePermissionStore } from "@/store";
+import { clearToken, getRefreshToken, setRefreshToken, setToken } from "@/utils/auth";
 
 const InitUserInfo = {
   name: "", // 用户名，用于展示在页面右上角头像处
@@ -8,7 +10,8 @@ const InitUserInfo = {
 
 export const useUserStore = defineStore("user", {
   state: () => ({
-    token: "main_token", // 默认token不走权限
+    token: "", // 访问令牌
+    refreshToken: "", // 刷新令牌
     userInfo: { ...InitUserInfo },
   }),
   getters: {
@@ -21,40 +24,75 @@ export const useUserStore = defineStore("user", {
       const mockLogin = async (userInfo) => {
         // 登录请求流程
         console.log(`用户信息:`, userInfo);
-        // const { account, password } = userInfo;
-        // if (account !== 'td') {
-        //   return {
-        //     code: 401,
-        //     message: '账号不存在',
-        //   };
-        // }
-        // if (['main_', 'dev_'].indexOf(password) === -1) {
-        //   return {
-        //     code: 401,
-        //     message: '密码错误',
-        //   };
-        // }
-        // const token = {
-        //   main_: 'main_token',
-        //   dev_: 'dev_token',
-        // }[password];
+        // 模拟登录接口返回访问令牌和刷新令牌
         return {
           code: 200,
           message: "登录成功",
-          data: "main_token",
+          data: {
+            accessToken: "main_token",
+            refreshToken: "refresh_token_" + Date.now(),
+          },
         };
       };
 
       const res = await mockLogin(userInfo);
       if (res.code === 200) {
-        this.token = res.data;
+        const { accessToken, refreshToken } = res.data;
+        this.token = accessToken;
+        this.refreshToken = refreshToken;
+
+        // 将令牌保存到本地存储
+        setToken(accessToken);
+        setRefreshToken(refreshToken);
       } else {
         throw res;
       }
     },
+
+    async refreshAccessToken() {
+      const mockRefreshToken = async (refreshToken) => {
+        // 模拟刷新令牌接口
+        console.log(`使用刷新令牌:`, refreshToken);
+        return {
+          code: 200,
+          message: "刷新成功",
+          data: {
+            accessToken: "new_access_token_" + Date.now(),
+            refreshToken: "new_refresh_token_" + Date.now(),
+          },
+        };
+      };
+
+      try {
+        const refreshToken = this.refreshToken || getRefreshToken();
+        if (!refreshToken) {
+          throw new Error("刷新令牌不存在");
+        }
+
+        const res = await mockRefreshToken(refreshToken);
+        if (res.code === 200) {
+          const { accessToken, refreshToken: newRefreshToken } = res.data;
+          this.token = accessToken;
+          this.refreshToken = newRefreshToken;
+
+          // 更新本地存储
+          setToken(accessToken);
+          setRefreshToken(newRefreshToken);
+
+          return accessToken;
+        } else {
+          throw new Error(res.message || "刷新令牌失败");
+        }
+      } catch (error) {
+        // 刷新失败，清除令牌并登出
+        this.logout();
+        throw error;
+      }
+    },
+
     async getUserInfo() {
       const mockRemoteUserInfo = async (token) => {
-        if (token === "main_token") {
+        if (token.includes("new_access_token_") || token === "main_token") {
           return {
             name: "Tencent",
             roles: ["all"], // 前端权限模型使用 如果使用请配置modules/permission-fe.ts使用
@@ -69,9 +107,14 @@ export const useUserStore = defineStore("user", {
 
       this.userInfo = res;
     },
+
     async logout() {
       this.token = "";
+      this.refreshToken = "";
       this.userInfo = { ...InitUserInfo };
+
+      // 清除本地存储的令牌
+      clearToken();
     },
   },
   persist: {
@@ -80,6 +123,6 @@ export const useUserStore = defineStore("user", {
       permissionStore.initRoutes();
     },
     key: "user",
-    paths: ["token"],
+    paths: ["token", "refreshToken"],
   },
 });

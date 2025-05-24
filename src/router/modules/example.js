@@ -21,6 +21,14 @@ export default [
           title: "数据字典示例",
         },
       },
+      {
+        path: "token-refresh",
+        name: "TokenRefreshDemo",
+        component: () => import("@/pages/example/token-refresh/index.vue"),
+        meta: {
+          title: "无感刷新Token示例",
+        },
+      },
     ],
   },
 ];

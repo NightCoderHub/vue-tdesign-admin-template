@@ -6,6 +6,7 @@ import throttle from "lodash/throttle";
 import { stringify } from "qs";
 
 import { ContentTypeEnum } from "@/constants";
+
 import { AxiosCanceler } from "./AxiosCancel";
 
 /**
@@ -13,17 +14,9 @@ import { AxiosCanceler } from "./AxiosCancel";
  */
 export class VAxios {
   /**
-   * Axios实例句柄
-   * @private
+   * 构造函数
+   * @param options
    */
-  instance;
-
-  /**
-   * Axios配置
-   * @private
-   */
-  options;
-
   constructor(options) {
     this.options = options;
     this.instance = axios.create(options);
@@ -203,6 +196,11 @@ export class VAxios {
     );
   }
 
+  /**
+   * 请求封装
+   * @param config
+   * @param options
+   */
   request(config, options) {
     const { requestOptions } = this.options;
 

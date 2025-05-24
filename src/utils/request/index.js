@@ -1,8 +1,10 @@
+// axios配置  可自行根据项目进行更改，只需更改该文件即可，其他文件可以不动
 import isString from "lodash/isString";
 import merge from "lodash/merge";
 
 import { ContentTypeEnum } from "@/constants";
 import { useUserStore } from "@/store";
+import { getToken, refreshToken, subscribeTokenRefresh } from "@/utils/auth";
 
 import { VAxios } from "./Axios";
 import { formatRequestDate, joinTimestamp, setObjToUrlParams } from "./utils";
@@ -111,7 +113,7 @@ const transform = {
   requestInterceptors: (config, options) => {
     // 请求之前处理config
     const userStore = useUserStore();
-    const { token } = userStore;
+    const token = userStore.token || getToken();
 
     if (token && config?.requestOptions?.withToken !== false) {
       // jwt token
@@ -126,8 +128,35 @@ const transform = {
   },
 
   // 响应错误处理
-  responseInterceptorsCatch: (error, instance) => {
-    const { config } = error;
+  responseInterceptorsCatch: async (error, instance) => {
+    const { config, response } = error;
+
+    // 处理401未授权错误，尝试刷新token
+    if (response?.status === 401) {
+      const userStore = useUserStore();
+
+      // 创建一个Promise，用于在token刷新后重试请求
+      const retryOriginalRequest = new Promise((resolve) => {
+        subscribeTokenRefresh((token) => {
+          // 更新请求头中的token
+          config.headers.Authorization = token;
+          resolve(instance(config));
+        });
+      });
+
+      try {
+        // 尝试刷新token
+        await refreshToken();
+        return retryOriginalRequest;
+      } catch (refreshError) {
+        // 刷新token失败，清除token并跳转到登录页
+        userStore.logout();
+        window.location.href = "/login";
+        return Promise.reject(refreshError);
+      }
+    }
+
+    // 处理其他错误或重试逻辑
     if (!config || !config.requestOptions.retry) return Promise.reject(error);
 
     config.retryCount = config.retryCount || 0;
@@ -152,7 +181,7 @@ function createAxios(opt) {
       {
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#authentication_schemes
         // 例如: authenticationScheme: 'Bearer'
-        authenticationScheme: "",
+        authenticationScheme: "Bearer",
         // 超时
         timeout: 10 * 1000,
         // 携带Cookie
