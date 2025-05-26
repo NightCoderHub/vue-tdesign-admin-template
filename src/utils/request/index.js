@@ -43,7 +43,6 @@ const transform = {
 
     //  这里 code为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
     const { code } = data;
-
     // 这里逻辑可以根据项目进行修改
     const hasSuccess = data && code === 0;
     if (hasSuccess) {
@@ -113,10 +112,10 @@ const transform = {
   requestInterceptors: (config) => {
     // 请求之前处理config
     const userStore = useUserStore();
-    const { token, tokenType } = userStore;
-    if (token && config?.requestOptions?.withToken !== false) {
+    const { accessToken, tokenType } = userStore;
+    if (accessToken && config?.requestOptions?.withToken !== false) {
       // jwt token
-      config.headers.Authorization = tokenType ? `${tokenType} ${token}` : token;
+      config.headers.Authorization = `${tokenType} ${accessToken}`;
     }
     return config;
   },
@@ -128,23 +127,32 @@ const transform = {
 
   // 响应错误处理
   responseInterceptorsCatch: async (error, instance) => {
+    const userStore = useUserStore();
+    // config是原始请求配置，response是响应对象
     const { config, response } = error;
     // 处理401未授权错误（token过期）
-    if (response?.status === 401) {
-      const userStore = useUserStore();
-      if (!userStore.isRefreshing) {
-        return userStore.refreshToken().then((newToken) => {
-          config.headers.Authorization = `${userStore.tokenType} ${newToken}`;
-          return instance(config); // 重试原请求
-        });
+    if (response?.status === 401 && !config._retry) {
+      config._retry = true;
+      if (userStore.isRefreshing) {
+        return new Promise((resolve, reject) => {
+          userStore.addToQueue({ resolve, reject });
+        })
+          .then((token) => {
+            config.headers.Authorization = `${userStore.tokenType} ${token}`;
+            return instance(config);
+          })
+          .catch((err) => Promise.reject(err));
       }
-      // 如果正在刷新，等待刷新完成后重试
-      return new Promise((resolve) => {
-        userStore.refreshSubscribers.push((newToken) => {
-          config.headers.Authorization = `${userStore.tokenType} ${newToken}`;
-          resolve(instance(config));
-        });
-      });
+      userStore.isRefreshing = true;
+      try {
+        const res = await userStore.refreshToken();
+        config.headers.Authorization = `${userStore.tokenType} ${res}`;
+        return instance(config);
+      } catch (error) {
+        return Promise.reject(error);
+      } finally {
+        userStore.isRefreshing = false;
+      }
     }
     // 处理其他错误或重试逻辑
     if (!config || !config.requestOptions.retry) return Promise.reject(error);
@@ -161,7 +169,11 @@ const transform = {
       }, config.requestOptions.retry.delay || 1);
     });
     config.headers = { ...config.headers, "Content-Type": ContentTypeEnum.Json };
-    return backoff.then((config) => instance.request(config));
+    return backoff.then((config) => {
+      const { accessToken, tokenType } = userStore;
+      config.headers.Authorization = `${tokenType} ${accessToken}`; // 更新 Token
+      return instance.request(config);
+    });
   },
 };
 

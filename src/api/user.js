@@ -13,7 +13,6 @@ export function getTokenApi(data) {
     },
     {
       withToken: false, // 不携带token，因为这是获取token的接口
-      isTransformResponse: false,
     },
   );
 }

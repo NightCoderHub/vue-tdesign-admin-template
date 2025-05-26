@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import router, { fixedRouterList, homepageRouterList } from "@/router";
 import { transformObjectToRoute } from "@/utils/route";
-import { getMenuList } from "@/api/permission";
+import { getRouteList } from "@/api/permission";
 
 export const usePermissionStore = defineStore("permission", {
   state: () => ({
@@ -24,7 +24,7 @@ export const usePermissionStore = defineStore("permission", {
     async buildAsyncRoutes() {
       try {
         // 发起菜单权限请求 获取菜单列表
-        const asyncRoutes = (await getMenuList()).list;
+        const asyncRoutes = (await getRouteList()).list;
         this.asyncRoutes = transformObjectToRoute(asyncRoutes);
         await this.initRoutes();
         return this.asyncRoutes;

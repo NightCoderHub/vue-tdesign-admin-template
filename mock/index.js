@@ -51,18 +51,7 @@ export default [
   {
     url: "/oauth2/token", // 新增oauth2/token接口路径
     method: "post", // 通常token获取使用POST方法
-    response: (req) => {
-      // 从请求体中获取username和password（假设前端通过form-data或json传递）
-      const { username, password } = req.body;
-
-      // 模拟简单校验（实际可根据需求添加逻辑，如校验密码是否正确）
-      if (!username || !password) {
-        return {
-          code: 400,
-          message: "用户名和密码不能为空",
-        };
-      }
-
+    response: () => {
       // 生成token相关字段
       return {
         code: 0,
@@ -193,9 +182,130 @@ export default [
                 },
               ],
             },
+            {
+              path: "/system",
+              name: "system",
+              component: "Layout",
+              redirect: "/system/dictionary",
+              meta: {
+                title: "系统管理",
+                icon: "setting",
+                orderNo: 6,
+              },
+              children: [
+                {
+                  path: "dictionary",
+                  name: "SystemDictionary",
+                  component: "/system/dictionary/index",
+                  meta: {
+                    title: "数据字典管理",
+                  },
+                },
+                {
+                  path: "route",
+                  name: "SystemRoute",
+                  component: "/system/permission/route/index",
+                  meta: {
+                    title: "菜单管理",
+                  },
+                },
+              ],
+            },
           ],
         }),
       },
+    },
+  },
+  // 新增：路由管理接口
+  {
+    url: "/route/add", // 新增路由接口
+    method: "post",
+    response: (req) => {
+      const { path, name, component } = req.body;
+
+      // 模拟校验必填参数
+      if (!path || !name || !component) {
+        return {
+          code: 400,
+          message: "缺少必填参数（path/name/component）",
+          data: null,
+        };
+      }
+
+      // 生成模拟路由数据（使用Mock.js）
+      const newRoute = {
+        id: Mock.mock("@integer(1000, 9999)"), // 随机ID
+        path,
+        name,
+        component,
+        meta: {
+          title: Mock.mock("@ctitle(3, 5)"), // 随机标题
+          icon: Mock.mock("@word(3)"), // 随机图标
+        },
+      };
+
+      return {
+        code: 0,
+        message: "路由添加成功",
+        data: newRoute,
+      };
+    },
+  },
+  {
+    url: "/route/update/:id", // 更新路由接口（:id为路由ID）
+    method: "put",
+    response: (req) => {
+      const { id } = req.params;
+      const updateData = req.body;
+
+      // 模拟校验路由是否存在（此处简化为固定逻辑）
+      if (!id) {
+        return {
+          code: 400,
+          message: "缺少路由ID",
+          data: null,
+        };
+      }
+
+      // 模拟更新后的路由数据（实际可根据updateData修改）
+      const updatedRoute = {
+        id,
+        path: updateData.path || `/mock-route/${id}`,
+        name: updateData.name || `route_${id}`,
+        component: updateData.component || "Layout",
+        meta: {
+          title: updateData.title || Mock.mock("@ctitle(3, 5)"),
+          icon: updateData.icon || Mock.mock("@word(3)"),
+        },
+      };
+
+      return {
+        code: 0,
+        message: `路由ID ${id} 更新成功`,
+        data: updatedRoute,
+      };
+    },
+  },
+  {
+    url: "/route/delete/:id", // 删除路由接口（:id为路由ID）
+    method: "delete",
+    response: (req) => {
+      const { id } = req.params;
+
+      // 模拟校验路由是否存在（此处简化为固定逻辑）
+      if (!id) {
+        return {
+          code: 400,
+          message: "缺少路由ID",
+          data: null,
+        };
+      }
+
+      return {
+        code: 0,
+        message: `路由ID ${id} 删除成功`,
+        data: { deletedId: id },
+      };
     },
   },
 ];

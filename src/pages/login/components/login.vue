@@ -1,6 +1,6 @@
 <template>
   <div class="item-container">
-    <t-form ref="formRef" :data="formData" label-width="0" :rule="FORM_RULES" @submit="onSubmit">
+    <t-form :data="formData" label-width="0" :rules="FORM_RULES" @submit="onSubmit">
       <t-form-item name="username">
         <t-input v-model="formData.username" size="large" placeholder="请输入账号">
           <template #prefix-icon>
@@ -8,20 +8,10 @@
           </template>
         </t-input>
       </t-form-item>
-
       <t-form-item name="password">
-        <t-input
-          v-model="formData.password"
-          size="large"
-          :type="showPsw ? 'text' : 'password'"
-          clearable
-          placeholder="请输入登录密码"
-        >
+        <t-input v-model="formData.password" size="large" type="password" clearable placeholder="请输入登录密码">
           <template #prefix-icon>
             <t-icon name="lock-on" />
-          </template>
-          <template #suffix-icon>
-            <t-icon :name="showPsw ? 'browse' : 'browse-off'" @click="showPsw = !showPsw" />
           </template>
         </t-input>
       </t-form-item>
@@ -41,19 +31,10 @@
 <script setup>
 import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-
 import { MessagePlugin } from "tdesign-vue-next";
 import { useUserStore } from "@/store";
 
 const userStore = useUserStore();
-
-const INITIAL_DATA = {
-  phone: "",
-  username: "admin",
-  password: "admin",
-  verifyCode: "",
-  checked: false,
-};
 
 const FORM_RULES = {
   phone: [{ required: true, message: "手机号必填", type: "error" }],
@@ -62,14 +43,18 @@ const FORM_RULES = {
   verifyCode: [{ required: true, message: "验证码必填", type: "error" }],
 };
 
-// const formRef = useTemplateRef();
-const formData = ref({ ...INITIAL_DATA });
-const showPsw = ref(false);
+const formData = ref({
+  username: "admin",
+  password: "admin",
+  verifyCode: "",
+  checked: false,
+});
 
 const router = useRouter();
 const route = useRoute();
-const onSubmit = async (ctx) => {
-  if (ctx.validateResult === true) {
+
+const onSubmit = async ({ validateResult }) => {
+  if (validateResult === true) {
     try {
       await userStore.login(formData.value);
       MessagePlugin.success("登录成功");
@@ -77,7 +62,6 @@ const onSubmit = async (ctx) => {
       const redirectUrl = redirect ? decodeURIComponent(redirect) : "/dashboard";
       router.push(redirectUrl);
     } catch (e) {
-      console.log("e :>> ", e);
       MessagePlugin.error(e.message);
     }
   }

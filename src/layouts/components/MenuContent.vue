@@ -36,7 +36,7 @@ const active = computed(() => getActive(route));
 
 const list = computed(() => {
   const { navData } = props;
-  return getMenuList(navData);
+  return getRouteList(navData);
 });
 
 // const menuIcon = (item) => {
@@ -50,7 +50,7 @@ const renderMenuTitle = (title) => {
   return title?.zh_CN;
 };
 
-const getMenuList = (list, basePath) => {
+const getRouteList = (list, basePath) => {
   if (!list || list.length === 0) {
     return [];
   }
@@ -66,7 +66,7 @@ const getMenuList = (list, basePath) => {
         path,
         title: item.meta?.title,
         icon: item.meta?.icon,
-        children: getMenuList(item.children, path),
+        children: getRouteList(item.children, path),
         meta: item.meta,
         redirect: item.redirect,
       };

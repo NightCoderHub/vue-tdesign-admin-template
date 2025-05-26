@@ -29,8 +29,8 @@ import login from "./components/login.vue";
 import register from "./components/register.vue";
 const type = ref("login");
 
-function switchType(type) {
-  type.value = type;
+function switchType(value) {
+  type.value = value;
 }
 </script>
 <style lang="scss" scoped>

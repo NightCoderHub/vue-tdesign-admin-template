@@ -39,7 +39,7 @@ const errorMsg = ref("");
 const isLoading = ref(false);
 
 // 计算属性：当前Token状态
-const token = computed(() => userStore.token);
+const token = computed(() => userStore.accessToken);
 const isTokenExpiredVal = computed(() => {
   return isTokenExpired(token.value);
 });
@@ -75,7 +75,7 @@ const mockTokenExpire = () => {
   const payload = JSON.parse(atob(payloadBase64));
   payload.exp = Math.floor(Date.now() / 1000) - 1; // 设置为1秒前过期
   const newPayloadBase64 = btoa(JSON.stringify(payload)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-  userStore.token = `${header}.${newPayloadBase64}.${signature}`;
+  userStore.accessToken = `${header}.${newPayloadBase64}.${signature}`;
 };
 </script>
 
