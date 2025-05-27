@@ -29,6 +29,7 @@ export const useUserStore = defineStore("user", {
       try {
         const res = await getUserInfoApi();
         this.userInfo = res;
+        return res;
       } catch (error) {
         throw new Error("获取用户信息失败：" + error.message);
       }
@@ -53,7 +54,6 @@ export const useUserStore = defineStore("user", {
       } catch (error) {
         this.processQueue(error);
         this.clearTokens();
-        this.logout(); // 刷新失败则登出
         throw new Error(error);
       }
     },

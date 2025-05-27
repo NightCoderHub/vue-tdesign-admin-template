@@ -160,7 +160,7 @@ const transform = {
         config.headers.Authorization = `${userStore.tokenType} ${res}`;
         return instance(config);
       } catch (error) {
-        userStore.logout(); // 刷新失败时清理 Token 并登出
+        window.location.href = "/login"; // 重定向到登录页面或其他处理方式
         return Promise.reject(error);
       } finally {
         userStore.isRefreshing = false;
