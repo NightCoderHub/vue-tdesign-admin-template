@@ -84,7 +84,8 @@ const router = useRouter();
 
 const settingStore = useSettingStore();
 const tabsRouterStore = useTabsRouterStore();
-const tabRouters = computed(() => tabsRouterStore.tabRouters.filter((route) => route.isAlive || route.isHome));
+const tabRouters = computed(() => tabsRouterStore.tabRouters.filter((route) => !route.meta?.noCache || route.isHome));
+
 const activeTabPath = ref("");
 
 const handleChangeCurrentTab = (path) => {

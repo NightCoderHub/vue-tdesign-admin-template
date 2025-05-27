@@ -51,7 +51,7 @@ const appendNewRoute = () => {
     meta: { title },
     name,
   } = route;
-  tabsRouterStore.appendTabRouterList({ path, query, title: title, name, isAlive: true, meta: route.meta });
+  tabsRouterStore.appendTabRouterList({ path, query, title: title, name, meta: route.meta });
 };
 
 onMounted(() => {

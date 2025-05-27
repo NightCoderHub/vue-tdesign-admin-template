@@ -20,7 +20,7 @@ export default [
     path: "/loginRedirect",
     name: "loginRedirect",
     redirect: "/login",
-    meta: { title: "登录页", icon: "logout" },
+    meta: { title: "登录页", icon: "logout", hidden: true },
     component: () => import("@/layouts/blank.vue"),
     children: [
       {

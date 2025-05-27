@@ -10,6 +10,7 @@ export default [
       title: "结果页",
       icon: "check-circle",
       hidden: true,
+      noCache: true,
     },
     children: [
       {
@@ -19,6 +20,7 @@ export default [
         meta: {
           title: "成功页",
           hidden: true,
+          noCache: true,
         },
       },
       {
@@ -28,6 +30,7 @@ export default [
         meta: {
           title: "失败页",
           hidden: true,
+          noCache: true,
         },
       },
       {
@@ -37,6 +40,7 @@ export default [
         meta: {
           title: "网络异常",
           hidden: true,
+          noCache: true,
         },
       },
       {
@@ -46,6 +50,7 @@ export default [
         meta: {
           title: "无权限",
           hidden: true,
+          noCache: true,
         },
       },
       {
@@ -55,6 +60,7 @@ export default [
         meta: {
           title: "访问页面不存在页",
           hidden: true,
+          noCache: true,
         },
       },
       {
@@ -64,6 +70,7 @@ export default [
         meta: {
           title: "服务器出错页",
           hidden: true,
+          noCache: true,
         },
       },
       // {
