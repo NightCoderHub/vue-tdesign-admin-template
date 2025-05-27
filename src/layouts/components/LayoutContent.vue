@@ -29,7 +29,7 @@
             }"
           >
             <template v-if="!routeItem.isHome">
-              {{ renderTitle(routeItem.title) }}
+              {{ routeItem.title }}
             </template>
             <t-icon v-else name="home" />
             <template #dropdown>
@@ -99,11 +99,6 @@ const handleRemove = (options) => {
 
   tabsRouterStore.subtractCurrentTabRouter({ path: options.value, routeIdx: options.index });
   if (options.value === route.path) router.push({ path: nextRouter.path, query: nextRouter.query });
-};
-
-const renderTitle = (title) => {
-  if (typeof title === "string") return title;
-  return title["zh_CN"];
 };
 
 const handleRefresh = (route, routeIdx) => {

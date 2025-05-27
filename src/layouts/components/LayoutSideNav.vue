@@ -26,7 +26,7 @@ const { routers: menuRouters } = storeToRefs(permissionStore);
 
 const sideMenu = computed(() => {
   const { layout, splitMenu } = settingStore;
-  let newMenuRouters = menuRouters.value;
+  let newMenuRouters = menuRouters.value.filter((menu) => menu.meta?.hidden !== false);
   if (layout === "mix" && splitMenu) {
     newMenuRouters.forEach((menu) => {
       if (route.path.indexOf(menu.path) === 0) {

@@ -20,18 +20,10 @@ const crumbs = computed(() => {
     if (meta?.hiddenBreadcrumb || Object.values(route.params).includes(path)) {
       return breadcrumbArray;
     }
-    let title = path;
-    if (meta?.title) {
-      if (typeof meta.title === "string") {
-        title = meta.title;
-      } else {
-        title = meta.title["zh_CN"];
-      }
-    }
     breadcrumbArray.push({
       path,
       to: breadcrumbArray[idx - 1] ? `/${breadcrumbArray[idx - 1].path}/${path}` : `/${path}`,
-      title,
+      title: meta.title,
     });
     return breadcrumbArray;
   }, []);

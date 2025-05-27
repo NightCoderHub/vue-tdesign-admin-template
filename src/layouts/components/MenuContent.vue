@@ -3,13 +3,13 @@
     <template v-for="item in list" :key="item.path">
       <template v-if="!item.children || !item.children.length || item.meta?.single">
         <t-menu-item v-if="getHref(item)" :name="item.path" :value="getPath(item)" @click="openHref(getHref(item)[0])">
-          {{ renderMenuTitle(item.title) }}
+          {{ item.title }}
         </t-menu-item>
         <t-menu-item v-else :name="item.path" :value="getPath(item)" :to="item.path">
-          {{ renderMenuTitle(item.title) }}
+          {{ item.title }}
         </t-menu-item>
       </template>
-      <t-submenu v-else :name="item.path" :value="item.path" :title="renderMenuTitle(item.title)">
+      <t-submenu v-else :name="item.path" :value="item.path" :title="item.title">
         <template #icon>
           <t-icon :name="item.icon" />
         </template>
@@ -37,17 +37,6 @@ const list = computed(() => {
   const { navData } = props;
   return getRouteList(navData);
 });
-
-// const menuIcon = (item) => {
-//    if (typeof item.icon === 'string') return <t-icon name={item.icon} />;
-//    const RenderIcon = item.icon;
-//    return RenderIcon;
-// };
-
-const renderMenuTitle = (title) => {
-  if (typeof title === "string") return title;
-  return title?.zh_CN;
-};
 
 const getRouteList = (list, basePath) => {
   if (!list || list.length === 0) {

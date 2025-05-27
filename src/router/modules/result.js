@@ -7,11 +7,9 @@ export default [
     component: Layout,
     redirect: "/result/success",
     meta: {
-      title: {
-        zh_CN: "结果页",
-        en_US: "Result",
-      },
+      title: "结果页",
       icon: "check-circle",
+      hidden: true,
     },
     children: [
       {
@@ -19,10 +17,8 @@ export default [
         name: "ResultSuccess",
         component: () => import("@/pages/result/success/index.vue"),
         meta: {
-          title: {
-            zh_CN: "成功页",
-            en_US: "Success",
-          },
+          title: "成功页",
+          hidden: true,
         },
       },
       {
@@ -30,10 +26,8 @@ export default [
         name: "ResultFail",
         component: () => import("@/pages/result/fail/index.vue"),
         meta: {
-          title: {
-            zh_CN: "失败页",
-            en_US: "Fail",
-          },
+          title: "失败页",
+          hidden: true,
         },
       },
       {
@@ -41,29 +35,36 @@ export default [
         name: "ResultNetworkError",
         component: () => import("@/pages/result/network-error/index.vue"),
         meta: {
-          title: {
-            zh_CN: "网络异常",
-            en_US: "Network Error",
-          },
+          title: "网络异常",
+          hidden: true,
         },
       },
       {
         path: "403",
         name: "Result403",
         component: () => import("@/pages/result/403/index.vue"),
-        meta: { title: { zh_CN: "无权限", en_US: "Forbidden" } },
+        meta: {
+          title: "无权限",
+          hidden: true,
+        },
       },
       {
         path: "404",
         name: "Result404",
         component: () => import("@/pages/result/404/index.vue"),
-        meta: { title: { zh_CN: "访问页面不存在页", en_US: "Not Found" } },
+        meta: {
+          title: "访问页面不存在页",
+          hidden: true,
+        },
       },
       {
         path: "500",
         name: "Result500",
         component: () => import("@/pages/result/500/index.vue"),
-        meta: { title: { zh_CN: "服务器出错页", en_US: "Server Error" } },
+        meta: {
+          title: "服务器出错页",
+          hidden: true,
+        },
       },
       // {
       //   path: 'browser-incompatible',
