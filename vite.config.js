@@ -5,6 +5,9 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import svgLoader from "vite-svg-loader";
 import viteCompression from "vite-plugin-compression";
+import AutoImport from "unplugin-auto-import/vite";
+import Components from "unplugin-vue-components/vite";
+import { TDesignResolver } from "unplugin-vue-components/resolvers";
 import VueDevTools from "vite-plugin-vue-devtools";
 import { viteMockServe } from "vite-plugin-mock";
 
@@ -26,6 +29,20 @@ export default defineConfig({
     viteMockServe({
       mockPath: "mock", // 指定mock文件存放目录
       enabled: true, // 开发环境启用
+    }),
+    AutoImport({
+      resolvers: [
+        TDesignResolver({
+          library: "vue-next",
+        }),
+      ],
+    }),
+    Components({
+      resolvers: [
+        TDesignResolver({
+          library: "vue-next",
+        }),
+      ],
     }),
   ],
   resolve: {

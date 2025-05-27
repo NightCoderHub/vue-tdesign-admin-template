@@ -45,7 +45,7 @@ export const useUserStore = defineStore("user", {
       this.refreshToken = refresh;
     },
 
-    async refreshToken() {
+    async refreshAuthTokens() {
       try {
         const { access_token, refresh_token } = await refreshTokenApi({ refresh_token: this.refreshToken });
         this.setTokens(access_token, refresh_token);

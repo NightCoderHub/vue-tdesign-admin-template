@@ -7,6 +7,7 @@ import { useUserStore } from "@/store";
 
 import { VAxios } from "./Axios";
 import { formatRequestDate, joinTimestamp, setObjToUrlParams } from "./utils";
+import { API_SUCCESS_CODE, LOGIN_API, REFRESH_TOKEN_API } from "@/constants";
 
 const env = import.meta.env.MODE || "development";
 
@@ -44,7 +45,7 @@ const transform = {
     //  这里 code为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
     const { code } = data;
     // 这里逻辑可以根据项目进行修改
-    const hasSuccess = data && code === 0;
+    const hasSuccess = data && code === API_SUCCESS_CODE;
     if (hasSuccess) {
       return data.data;
     }
@@ -130,8 +131,17 @@ const transform = {
     const userStore = useUserStore();
     // config是原始请求配置，response是响应对象
     const { config, response } = error;
-    // 处理401未授权错误（token过期）
+
+    // 处理 401 未授权错误（token 过期）
     if (response?.status === 401 && !config._retry) {
+      // 新增：判断是否是登录/刷新 Token 接口（根据项目实际路径调整）
+      const isLoginOrRefreshRequest = config.url.includes(LOGIN_API) || config.url.includes(REFRESH_TOKEN_API); // 匹配登录接口和刷新 Token 接口路径
+
+      // 如果是登录/刷新接口的 401，直接抛出错误（不触发刷新）
+      if (isLoginOrRefreshRequest) {
+        return Promise.reject(error);
+      }
+
       config._retry = true;
       if (userStore.isRefreshing) {
         return new Promise((resolve, reject) => {
@@ -143,12 +153,14 @@ const transform = {
           })
           .catch((err) => Promise.reject(err));
       }
+
       userStore.isRefreshing = true;
       try {
-        const res = await userStore.refreshToken();
+        const res = await userStore.refreshAuthTokens();
         config.headers.Authorization = `${userStore.tokenType} ${res}`;
         return instance(config);
       } catch (error) {
+        userStore.logout(); // 刷新失败时清理 Token 并登出
         return Promise.reject(error);
       } finally {
         userStore.isRefreshing = false;

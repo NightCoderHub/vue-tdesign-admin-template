@@ -73,13 +73,3 @@ router.afterEach((to) => {
   }
   NProgress.done();
 });
-
-// 我已经成功为TDesign Vue Next项目添加了无感刷新token功能。实现了以下核心功能：
-
-// Token管理工具类：创建了auth.ts工具类，提供了token的获取、设置、判断过期和刷新等功能。
-
-// 用户存储模块增强：修改了user.ts存储模块，添加了refreshToken状态和刷新token的方法。
-
-// 请求拦截器优化：在request/index.ts中实现了响应拦截器，当接收到401未授权错误时，自动刷新token并重试原始请求。
-
-// 路由守卫增强：修改了permission.ts，在路由跳转前检查token是否过期，过期则自动刷新。
