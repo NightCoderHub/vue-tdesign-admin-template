@@ -22,7 +22,7 @@
       </div>
 
       <t-form-item class="btn-container">
-        <t-button block size="large" type="submit"> 登录 </t-button>
+        <t-button block size="large" type="submit" :loading="isLoading"> 登录 </t-button>
       </t-form-item>
     </t-form>
   </div>
@@ -52,8 +52,9 @@ const formData = ref({
 
 const router = useRouter();
 const route = useRoute();
-
+const isLoading = ref(false);
 const onSubmit = async ({ validateResult }) => {
+  isLoading.value = true;
   if (validateResult === true) {
     try {
       await userStore.login(formData.value);
@@ -63,6 +64,8 @@ const onSubmit = async ({ validateResult }) => {
       router.push(redirectUrl);
     } catch (e) {
       MessagePlugin.error(e.message);
+    } finally {
+      isLoading.value = false;
     }
   }
 };

@@ -28,6 +28,17 @@ export function refreshTokenApi(data) {
   });
 }
 /**
+ * 注销并失效刷新token接口（OAuth2模式）
+ * @param {string} refresh_token - 需要失效的刷新令牌
+ * @returns {Promise} 注销操作结果
+ */
+export function revokeTokenApi(data) {
+  return request.post({
+    url: "/oauth2/logout", // 对应后端注销刷新token接口路径
+    data, // 传递需要失效的refresh_token到请求体
+  });
+}
+/**
  * 获取用户基本信息
  * @returns {Promise} 用户信息请求结果
  */

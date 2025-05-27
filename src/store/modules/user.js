@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { usePermissionStore } from "@/store";
-import { getTokenApi, getUserInfoApi, refreshTokenApi } from "@/api/user";
+import { getTokenApi, getUserInfoApi, refreshTokenApi, revokeTokenApi } from "@/api/user";
+import { aesEncrypt, aesDecrypt } from "@/utils/crypto";
 
 export const useUserStore = defineStore("user", {
   state: () => ({
@@ -16,10 +17,8 @@ export const useUserStore = defineStore("user", {
       try {
         const data = await getTokenApi(userInfo);
         const { access_token, refresh_token } = data;
-        this.$patch({
-          accessToken: access_token,
-          refreshToken: refresh_token,
-        });
+        this.accessToken = access_token;
+        this.refreshToken = aesEncrypt(refresh_token);
       } catch (error) {
         throw new Error(error.response.data.message);
       }
@@ -37,19 +36,15 @@ export const useUserStore = defineStore("user", {
 
     logout() {
       this.$reset();
+      revokeTokenApi({ refresh_token: aesDecrypt(this.refreshToken) });
       const permissionStore = usePermissionStore();
       permissionStore.restoreRoutes();
     },
 
-    setTokens(access, refresh) {
-      this.accessToken = access;
-      this.refreshToken = refresh;
-    },
-
     async refreshAuthTokens() {
       try {
-        const { access_token, refresh_token } = await refreshTokenApi({ refresh_token: this.refreshToken });
-        this.setTokens(access_token, refresh_token);
+        const { access_token } = await refreshTokenApi({ refresh_token: aesDecrypt(this.refreshToken) });
+        this.accessToken = access_token;
         this.processQueue(null, access_token);
       } catch (error) {
         this.processQueue(error);
@@ -79,6 +74,6 @@ export const useUserStore = defineStore("user", {
       const permissionStore = usePermissionStore();
       permissionStore.initRoutes();
     },
-    pick: ["accessToken"],
+    pick: ["accessToken", "refreshToken"],
   },
 });
