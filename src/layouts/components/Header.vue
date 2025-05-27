@@ -37,22 +37,22 @@
             <template #dropdown>
               <t-dropdown-menu>
                 <t-dropdown-item class="operations-dropdown-container-item" @click="handleNav('/user/index')">
-                  <iconify-icon icon="tdesign:user-circle" class="t-icon" />
+                  <t-icon name="user-circle" />
                   个人中心
                 </t-dropdown-item>
                 <t-dropdown-item class="operations-dropdown-container-item" @click="handleLogout">
-                  <iconify-icon icon="tdesign:poweroff" class="t-icon" />
+                  <t-icon name="poweroff" />
                   退出登录
                 </t-dropdown-item>
               </t-dropdown-menu>
             </template>
             <t-button class="header-user-btn" theme="default" variant="text">
               <template #icon>
-                <iconify-icon icon="tdesign:user-circle" class="t-icon" />
+                <t-icon name="user-circle" />
               </template>
-              <div class="header-user-account">{{ user.userInfo?.name }}</div>
+              <div class="header-user-account">{{ user.userInfo?.nickname }}</div>
               <template #suffix>
-                <iconify-icon icon="tdesign:chevron-down" class="t-icon" />
+                <t-icon name="chevron-down" />
               </template>
             </t-button>
           </t-dropdown>
@@ -65,7 +65,6 @@
 <script setup>
 import { computed } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { Icon as IconifyIcon } from "@iconify/vue";
 
 import LogoFull from "@/assets/assets-logo-full.svg?component";
 import { getActive } from "@/router";

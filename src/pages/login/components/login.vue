@@ -45,7 +45,7 @@ const FORM_RULES = {
 
 const formData = ref({
   username: "admin",
-  password: "admin",
+  password: "admin123",
   verifyCode: "",
   checked: false,
 });

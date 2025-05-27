@@ -3,7 +3,7 @@ import { request } from "@/utils/request";
 // 获取路由列表（原有接口）
 export function getRouteList() {
   return request.get({
-    url: "/get-menu-list-i18n",
+    url: "/get-menu-list",
   });
 }
 

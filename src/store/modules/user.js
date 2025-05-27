@@ -21,7 +21,7 @@ export const useUserStore = defineStore("user", {
           refreshToken: refresh_token,
         });
       } catch (error) {
-        throw new Error(error.message);
+        throw new Error(error.response.data.message);
       }
     },
 

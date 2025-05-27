@@ -122,7 +122,7 @@ export default [
     },
   },
   {
-    url: "/get-menu-list-i18n",
+    url: "/get-menu-list",
     method: "get",
     timeout: 2000,
     response: {

@@ -11,7 +11,7 @@
       </template>
       <t-submenu v-else :name="item.path" :value="item.path" :title="renderMenuTitle(item.title)">
         <template #icon>
-          <iconify-icon :icon="'tdesign:' + item.icon" class="t-icon" />
+          <t-icon :name="item.icon" />
         </template>
         <menu-content v-if="item.children" :nav-data="item.children" />
       </t-submenu>
@@ -22,7 +22,6 @@
 import { computed } from "vue";
 import { getActive } from "@/router";
 import { useRoute } from "vue-router";
-import { Icon as IconifyIcon } from "@iconify/vue";
 
 const props = defineProps({
   navData: {
