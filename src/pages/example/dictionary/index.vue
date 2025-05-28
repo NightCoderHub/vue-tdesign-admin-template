@@ -166,7 +166,6 @@ const handleUserStatusChange = (value) => {
 // 提交表单
 const handleSubmit = () => {
   MessagePlugin.success("表单提交成功");
-  console.log("表单数据:", formData);
 };
 
 // 重置表单
