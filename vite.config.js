@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
 import path from "node:path";
+import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import svgLoader from "vite-svg-loader";
 import viteCompression from "vite-plugin-compression";
@@ -12,6 +13,9 @@ import VueDevTools from "vite-plugin-vue-devtools";
 import { viteMockServe } from "vite-plugin-mock";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// 读取package.json内容
+const pkg = JSON.parse(readFileSync(path.resolve(__dirname, "package.json"), "utf-8"));
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -45,6 +49,10 @@ export default defineConfig({
       ],
     }),
   ],
+  define: {
+    // 注入项目名称到环境变量
+    "import.meta.env.VITE_APP_NAME": JSON.stringify(pkg.name),
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),
