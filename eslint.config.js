@@ -11,7 +11,9 @@ export default defineConfig([
     files: ["**/*.{js,mjs,cjs,vue}"],
     plugins: { js },
     extends: ["js/recommended"],
-    rules: {},
+    rules: {
+      "no-console": ["error", { allow: ["error", "warn", "info"] }],
+    },
   },
   pluginVue.configs["flat/recommended"],
   {
