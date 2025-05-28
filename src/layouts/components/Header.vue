@@ -33,6 +33,14 @@
               <t-icon name="help-circle" />
             </t-button>
           </t-tooltip>
+
+          <!-- 新增全屏切换按钮 -->
+          <t-tooltip placement="bottom" content="全屏">
+            <t-button theme="default" shape="square" variant="text" @click="toggleFullscreen">
+              <t-icon :name="isFullscreen ? 'fullscreen-exit-1' : 'fullscreen-1'" />
+            </t-button>
+          </t-tooltip>
+
           <t-dropdown :min-column-width="120" trigger="click">
             <template #dropdown>
               <t-dropdown-menu>
@@ -63,6 +71,7 @@
 </template>
 
 <script setup>
+import { ref, onMounted, onUnmounted } from "vue";
 import { computed } from "vue";
 import { useRouter, useRoute } from "vue-router";
 
@@ -149,6 +158,30 @@ const navToGitHub = () => {
 const navToHelper = () => {
   window.open("http://tdesign.tencent.com/starter/docs/get-started");
 };
+
+// 新增全屏状态和方法
+const isFullscreen = ref(false);
+
+const toggleFullscreen = () => {
+  if (document.fullscreenElement) {
+    document.exitFullscreen();
+  } else {
+    document.documentElement.requestFullscreen();
+  }
+};
+
+// 监听全屏状态变化
+const handleFullscreenChange = () => {
+  isFullscreen.value = !!document.fullscreenElement;
+};
+
+onMounted(() => {
+  document.addEventListener("fullscreenchange", handleFullscreenChange);
+});
+
+onUnmounted(() => {
+  document.removeEventListener("fullscreenchange", handleFullscreenChange);
+});
 </script>
 <style lang="scss">
 .operations-dropdown-container-item {
