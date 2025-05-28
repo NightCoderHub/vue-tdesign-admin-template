@@ -2,36 +2,6 @@
 import { onUnmounted, ref } from "vue";
 
 /**
- * eChart hook
- * @param domId
- */
-// export const useChart = (domId) => {
-//   let chartContainer;
-//   const selfChart = shallowRef();
-//   const updateContainer = () => {
-//     selfChart.value.resize({
-//       width: chartContainer.clientWidth,
-//       height: chartContainer.clientHeight,
-//     });
-//   };
-
-//   onMounted(() => {
-//     if (!chartContainer) {
-//       chartContainer = document.getElementById(domId);
-//     }
-//     selfChart.value = echarts.init(chartContainer);
-//   });
-
-//   window.addEventListener('resize', updateContainer, false);
-
-//   onUnmounted(() => {
-//     window.removeEventListener('resize', updateContainer);
-//   });
-
-//   return selfChart;
-// };
-
-/**
  * counter utils
  * @param duration
  * @returns
