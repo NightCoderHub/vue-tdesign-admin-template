@@ -35,8 +35,8 @@ export const useUserStore = defineStore("user", {
     },
 
     logout() {
-      this.$reset();
       revokeTokenApi({ refresh_token: aesDecrypt(this.refreshToken) });
+      this.$reset();
       const permissionStore = usePermissionStore();
       permissionStore.restoreRoutes();
     },
