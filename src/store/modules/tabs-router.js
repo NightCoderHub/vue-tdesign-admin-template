@@ -8,6 +8,7 @@ const homeRoute = [
     title: "仪表盘",
     name: "DashboardBase",
     isHome: true,
+    isAlive: true,
   },
 ];
 

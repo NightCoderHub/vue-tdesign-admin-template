@@ -1,21 +1,15 @@
 <template>
-  <div class="dashboard-base">
-    detail
-    <!-- -->
-    <h1 class="dashboard-base-h1">标题</h1>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-  </div>
+  <div class="dashboard-detail">detail</div>
 </template>
 
-<script setup></script>
+<script setup>
+defineOptions({
+  name: "DashboardDetail",
+});
+</script>
 
 <style lang="scss" scoped>
-.dashboard-base {
+.dashboard-detail {
   &-h1 {
     color: red;
   }

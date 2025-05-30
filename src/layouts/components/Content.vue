@@ -2,7 +2,7 @@
   <router-view v-if="!isRefreshing" v-slot="{ Component }">
     <transition name="fade" mode="out-in">
       <keep-alive :include="aliveViews">
-        <component :is="Component" />
+        <component :is="Component" :key="activeRouteFullPath" />
       </keep-alive>
     </transition>
   </router-view>
@@ -13,6 +13,7 @@
 import { isBoolean } from "lodash-es";
 import { isUndefined } from "lodash-es";
 import { computed } from "vue";
+import { useRouter } from "vue-router";
 
 import FramePage from "@/layouts/frame/index.vue";
 import { useTabsRouterStore } from "@/store";
@@ -23,11 +24,10 @@ import { useTabsRouterStore } from "@/store";
 //  <component :is="Component" :key="activeRouteFullPath" />
 // </suspense>
 
-// import { useRouter } from 'vue-router';
-// const activeRouteFullPath = computed(() => {
-//   const router = useRouter();
-//   return router.currentRoute.value.fullPath;
-// });
+const activeRouteFullPath = computed(() => {
+  const router = useRouter();
+  return router.currentRoute.value.fullPath;
+});
 
 const aliveViews = computed(() => {
   const tabsRouterStore = useTabsRouterStore();

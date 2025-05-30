@@ -53,7 +53,6 @@ declare module 'vue' {
     TSpace: typeof import('tdesign-vue-next')['Space']
     TSubmenu: typeof import('tdesign-vue-next')['Submenu']
     TTable: typeof import('tdesign-vue-next')['Table']
-    TTabPane: typeof import('tdesign-vue-next')['TabPane']
     TTabPanel: typeof import('tdesign-vue-next')['TabPanel']
     TTabs: typeof import('tdesign-vue-next')['Tabs']
     TTag: typeof import('tdesign-vue-next')['Tag']
