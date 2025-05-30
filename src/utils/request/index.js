@@ -132,7 +132,7 @@ const transform = {
     // config是原始请求配置，response是响应对象
     const { config, response } = error;
 
-    // 处理 401 未授权错误（token 过期）
+    // 处理 401 未授权错误（token 过期）,尝试刷新 Token 并重新发起请求
     if (response?.status === 401 && !config._retry) {
       // 新增：判断是否是登录/刷新 Token 接口（根据项目实际路径调整）
       const isLoginOrRefreshRequest = config.url.includes(LOGIN_API) || config.url.includes(REFRESH_TOKEN_API); // 匹配登录接口和刷新 Token 接口路径
@@ -168,6 +168,13 @@ const transform = {
     }
     // 处理其他错误或重试逻辑
     if (!config || !config.requestOptions.retry) return Promise.reject(error);
+
+    // 校验请求方法是否为幂等（仅允许 GET/HEAD/PUT/DELETE）
+    const allowedMethods = ["get", "head", "put", "delete"];
+    const isIdempotent = allowedMethods.includes(config.method?.toLowerCase());
+    if (!isIdempotent) {
+      return Promise.reject(error);
+    }
 
     config.retryCount = config.retryCount || 0;
 

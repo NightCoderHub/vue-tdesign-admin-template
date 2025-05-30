@@ -19,6 +19,8 @@ export class AxiosCanceler {
    * @param config
    */
   addPending(config) {
+    // 若为重试请求，跳过添加 pending 标记
+    if (config._retry) return;
     this.removePending(config);
     const url = getPendingUrl(config);
     config.cancelToken =
