@@ -1,8 +1,6 @@
 import axios from "axios";
 import cloneDeep from "lodash/cloneDeep";
-import debounce from "lodash/debounce";
 import isFunction from "lodash/isFunction";
-import throttle from "lodash/throttle";
 import { stringify } from "qs";
 
 import { ContentTypeEnum } from "@/constants";
@@ -202,23 +200,6 @@ export class VAxios {
    * @param options
    */
   request(config, options) {
-    const { requestOptions } = this.options;
-    if (requestOptions.throttle !== undefined && requestOptions.debounce !== undefined) {
-      throw new Error("throttle and debounce cannot be set at the same time");
-    }
-
-    if (requestOptions.throttle && requestOptions.throttle.delay !== 0) {
-      return new Promise((resolve) => {
-        throttle(() => resolve(this.synthesisRequest(config, options)), requestOptions.throttle.delay);
-      });
-    }
-
-    if (requestOptions.debounce && requestOptions.debounce.delay !== 0) {
-      return new Promise((resolve) => {
-        debounce(() => resolve(this.synthesisRequest(config, options)), requestOptions.debounce.delay);
-      });
-    }
-
     return this.synthesisRequest(config, options);
   }
 

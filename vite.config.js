@@ -90,4 +90,14 @@ export default defineConfig({
       },
     },
   },
+  server: {
+    proxy: {
+      "/api/jikan": {
+        target: "https://api.jikan.moe",
+        changeOrigin: true,
+        secure: false, // 开发环境忽略 HTTPS 证书验证
+        rewrite: (path) => path.replace(/^\/api\/jikan/, ""), // 去掉前缀
+      },
+    },
+  },
 });
