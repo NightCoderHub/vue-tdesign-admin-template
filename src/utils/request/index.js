@@ -224,7 +224,7 @@ function createAxios(opt) {
           // 是否忽略请求取消令牌
           // 如果启用，则重复请求时不进行处理
           // 如果禁用，则重复请求时会取消当前请求
-          ignoreCancelToken: true,
+          ignoreCancelToken: false,
           // 是否携带token
           withToken: true,
           // 重试
@@ -239,3 +239,9 @@ function createAxios(opt) {
   );
 }
 export const request = createAxios();
+export const requestWithPublicAPi = createAxios({
+  requestOptions: {
+    apiUrl: "",
+    isReturnNativeResponse: true,
+  },
+});
