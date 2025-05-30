@@ -11,6 +11,7 @@ import Components from "unplugin-vue-components/vite";
 import { TDesignResolver } from "unplugin-vue-components/resolvers";
 import VueDevTools from "vite-plugin-vue-devtools";
 import { viteMockServe } from "vite-plugin-mock";
+import { visualizer } from "rollup-plugin-visualizer";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -83,11 +84,21 @@ export default defineConfig({
          * @returns {string | undefined} - 返回处理后的代码块名称，如果输入不满足条件则返回undefined
          */
         manualChunks(id) {
+          if (id.includes("tdesign-vue-next") || id.includes("tdesign-icons-vue-next")) {
+            return "tdesign";
+          }
           if (id.includes("node_modules")) {
             return "vendor";
           }
         },
       },
+      plugins: [
+        visualizer({
+          filename: "dist/stats.html",
+          open: true,
+          gzipSize: true,
+        }),
+      ],
     },
   },
   server: {
