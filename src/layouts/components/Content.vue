@@ -10,8 +10,8 @@
 </template>
 
 <script setup>
-import isBoolean from "lodash/isBoolean";
-import isUndefined from "lodash/isUndefined";
+import { isBoolean } from "lodash-es";
+import { isUndefined } from "lodash-es";
 import { computed } from "vue";
 
 import FramePage from "@/layouts/frame/index.vue";

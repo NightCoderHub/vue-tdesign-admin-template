@@ -1,4 +1,4 @@
-import debounce from "lodash/debounce";
+import { debounce } from "lodash-es";
 import { onMounted, onUnmounted } from "vue";
 
 export function useWindowSizeFn(fn, options, wait = 150) {

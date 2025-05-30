@@ -6,7 +6,7 @@
   </div>
 </template>
 <script setup>
-import debounce from "lodash/debounce";
+import { debounce } from "lodash-es";
 import { computed, ref, unref, watch, useTemplateRef } from "vue";
 import { useWindowSizeFn } from "@/hooks/event/useWindowSizeFn";
 import { useSettingStore } from "@/store";

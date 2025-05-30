@@ -1,6 +1,6 @@
 import axios from "axios";
-import cloneDeep from "lodash/cloneDeep";
-import isFunction from "lodash/isFunction";
+import { cloneDeep } from "lodash-es";
+import { isFunction } from "lodash-es";
 import { stringify } from "qs";
 
 import { ContentTypeEnum } from "@/constants";

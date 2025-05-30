@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import union from "lodash/union";
+import { union } from "lodash-es";
 import { computed, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 

@@ -1,4 +1,4 @@
-import uniq from "lodash/uniq";
+import { uniq } from "lodash-es";
 import { createRouter, createWebHistory } from "vue-router";
 
 // 导入homepage相关固定路由

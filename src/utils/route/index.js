@@ -1,17 +1,9 @@
-import cloneDeep from "lodash/cloneDeep";
+import { cloneDeep } from "lodash-es";
 
-import {
-  BLANK_LAYOUT,
-  EXCEPTION_COMPONENT,
-  IFRAME,
-  LAYOUT,
-  PAGE_NOT_FOUND_ROUTE,
-  PARENT_LAYOUT,
-} from "@/utils/route/constant";
-
+import { BLANK_LAYOUT, EXCEPTION_COMPONENT, IFRAME, PAGE_NOT_FOUND_ROUTE, PARENT_LAYOUT } from "@/utils/route/constant";
+import LayoutComponent from "@/layouts/index.vue";
 const LayoutMap = new Map();
 
-LayoutMap.set("LAYOUT", LAYOUT);
 LayoutMap.set("BLANK", BLANK_LAYOUT);
 LayoutMap.set("IFRAME", IFRAME);
 
@@ -72,10 +64,10 @@ export function transformObjectToRoute(routeList) {
 
     if (component) {
       if (component.toUpperCase() === "LAYOUT") {
-        route.component = LayoutMap.get(component.toUpperCase());
+        route.component = LayoutComponent;
       } else {
         route.children = [cloneDeep(route)];
-        route.component = LAYOUT;
+        route.component = LayoutComponent;
         route.name = `${route.name}Parent`;
         route.path = "";
         route.meta = route.meta || {};
