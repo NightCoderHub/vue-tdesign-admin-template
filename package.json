@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "prepare": "husky",
     "lint:fix": "eslint --ext .vue,.js,jsx ./ --max-warnings 0 --fix",
+    "lint-staged": "lint-staged",
     "commit": "cz",
     "release": "standard-version",
     "release:minor": "standard-version --release-as minor",
@@ -62,8 +63,8 @@
     "vite-plugin-vue-devtools": "^7.7.6"
   },
   "lint-staged": {
-    "*.{js,jsx,vue}": [
-      "pnpm lint:fix"
+    "*.{js,vue,jsx}": [
+      "eslint --ext .vue,.js,.jsx --max-warnings 0 --fix"
     ]
   },
   "config": {
