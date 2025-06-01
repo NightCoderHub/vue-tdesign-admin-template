@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { usePermissionStore } from "@/store";
+import { usePermissionStore, useTabsRouterStore } from "@/store";
 import { getTokenApi, getUserInfoApi, refreshTokenApi, revokeTokenApi } from "@/api/user";
 import { aesEncrypt, aesDecrypt } from "@/utils/crypto";
 
@@ -41,6 +41,8 @@ export const useUserStore = defineStore("user", {
       this.$reset();
       const permissionStore = usePermissionStore();
       permissionStore.restoreRoutes();
+      const tabsRouterStore = useTabsRouterStore();
+      tabsRouterStore.removeTabRouterList();
     },
 
     async refreshAuthTokens() {
