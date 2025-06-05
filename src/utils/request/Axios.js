@@ -81,7 +81,8 @@ export class VAxios {
       // 如果忽略取消令牌，则不会取消重复的请求
       const { ignoreCancelToken } = config.requestOptions;
       const ignoreCancel = ignoreCancelToken ?? this.options.requestOptions?.ignoreCancelToken;
-      if (!ignoreCancel) axiosCanceler.addPending(config);
+      // 若为重试请求，跳过添加 pending 标记
+      if (!ignoreCancel && !config._retry) axiosCanceler.addPending(config);
 
       if (requestInterceptors && isFunction(requestInterceptors)) {
         config = requestInterceptors(config, this.options);

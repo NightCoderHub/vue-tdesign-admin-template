@@ -131,7 +131,7 @@ const transform = {
     const userStore = useUserStore();
     // config是原始请求配置，response是响应对象
     const { config, response } = error;
-
+    // debugger;
     // 处理 401 未授权错误（token 过期）,尝试刷新 Token 并重新发起请求
     if (response?.status === 401 && !config._retry) {
       // 新增：判断是否是登录/刷新 Token 接口（根据项目实际路径调整）
@@ -175,24 +175,29 @@ const transform = {
     if (!isIdempotent) {
       return Promise.reject(error);
     }
+    // 判断是否为超时错误
+    if (error.code === "ECONNABORTED" && error.message.includes("timeout")) {
+      config.retryCount = config.retryCount || 0;
 
-    config.retryCount = config.retryCount || 0;
+      if (config.retryCount >= config.requestOptions.retry.count) return Promise.reject(error);
 
-    if (config.retryCount >= config.requestOptions.retry.count) return Promise.reject(error);
+      config.retryCount += 1;
+      // 添加_retry标记，避免重试请求被重复请求机制拦截
+      config._retry = true;
+      const backoff = new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(config);
+        }, config.requestOptions.retry.delay || 1);
+      });
+      config.headers = { ...config.headers, "Content-Type": ContentTypeEnum.Json };
+      return backoff.then((config) => {
+        const { accessToken, tokenType } = userStore;
+        config.headers.Authorization = `${tokenType} ${accessToken}`; // 更新 Token
+        return instance.request(config);
+      });
+    }
 
-    config.retryCount += 1;
-
-    const backoff = new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(config);
-      }, config.requestOptions.retry.delay || 1);
-    });
-    config.headers = { ...config.headers, "Content-Type": ContentTypeEnum.Json };
-    return backoff.then((config) => {
-      const { accessToken, tokenType } = userStore;
-      config.headers.Authorization = `${tokenType} ${accessToken}`; // 更新 Token
-      return instance.request(config);
-    });
+    return Promise.reject(error); // 抛出错误，以便调用方捕获
   },
 };
 
