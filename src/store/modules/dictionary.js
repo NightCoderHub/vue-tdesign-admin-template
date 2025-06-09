@@ -1,19 +1,6 @@
 // 数据字典状态管理
 import { defineStore } from "pinia";
-import { DICTIONARY_MAPS } from "@/constants/dictionary";
-
-// 模拟API请求获取数据字典
-const fetchDictionaryData = (dictType) => {
-  return new Promise((resolve) => {
-    // 模拟网络请求延迟
-    setTimeout(() => {
-      // 从本地常量中获取字典数据
-      // 实际项目中，这里应该是从后端API获取数据
-      const dictData = DICTIONARY_MAPS[dictType] || [];
-      resolve(dictData);
-    }, 300);
-  });
-};
+import { getDictionaryList } from "@/api/dictionaries";
 
 // 定义数据字典Store
 export const useDictionaryStore = defineStore("dictionary", {
@@ -95,7 +82,7 @@ export const useDictionaryStore = defineStore("dictionary", {
         this.loadingTypes.push(type);
 
         // 从API获取字典数据
-        const dictData = await fetchDictionaryData(type);
+        const dictData = await getDictionaryList({ type });
 
         // 更新状态
         this.dictionaries[type] = dictData;

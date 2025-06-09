@@ -8,21 +8,21 @@
             <t-form-item label="用户状态">
               <dict-select
                 v-model="formData.userStatus"
-                type="USER_STATUS"
+                type="USER_STATUS_DICT"
                 placeholder="请选择用户状态"
                 @change="handleUserStatusChange"
               />
             </t-form-item>
             <t-form-item label="订单状态">
-              <dict-select v-model="formData.orderStatus" type="ORDER_STATUS" placeholder="请选择订单状态" />
+              <dict-select v-model="formData.orderStatus" type="ORDER_STATUS_DICT" placeholder="请选择订单状态" />
             </t-form-item>
 
             <t-form-item label="支付方式">
-              <dict-select v-model="formData.paymentMethod" type="PAYMENT_METHOD" placeholder="请选择支付方式" />
+              <dict-select v-model="formData.paymentMethod" type="PAYMENT_METHOD_DICT" placeholder="请选择支付方式" />
             </t-form-item>
 
             <t-form-item label="优先级(多选)">
-              <dict-select v-model="formData.priorities" type="PRIORITY" placeholder="请选择优先级" multiple />
+              <dict-select v-model="formData.priorities" type="PRIORITY_DICT" placeholder="请选择优先级" multiple />
             </t-form-item>
           </t-form>
 
@@ -111,11 +111,11 @@ defineOptions({
 
 // 使用字典Hook
 const { getDictionary, getDictOptions, getDictLabel, getDictColor } = useDictionary([
-  "USER_STATUS",
-  "GENDER",
-  "ORDER_STATUS",
-  "PAYMENT_METHOD",
-  "PRIORITY",
+  "USER_STATUS_DICT",
+  "GENDER_DICT",
+  "ORDER_STATUS_DICT",
+  "PAYMENT_METHOD_DICT",
+  "PRIORITY_DICT",
 ]);
 
 // 表单数据
@@ -135,7 +135,7 @@ const genderOptions = ref([]);
 
 // 用户状态字典数据
 const userStatusDictData = computed(() => {
-  return getDictionary("USER_STATUS");
+  return getDictionary("USER_STATUS_DICT");
 });
 
 // 字典表格列定义
@@ -150,8 +150,8 @@ const dictColumns = [
 
 // 初始化
 const initDictOptions = () => {
-  userStatusOptions.value = getDictOptions("USER_STATUS");
-  genderOptions.value = getDictOptions("GENDER");
+  userStatusOptions.value = getDictOptions("USER_STATUS_DICT");
+  genderOptions.value = getDictOptions("GENDER_DICT");
 };
 
 // 页面加载完成后初始化字典选项
@@ -159,7 +159,7 @@ setTimeout(initDictOptions, 500);
 
 // 处理用户状态变化
 const handleUserStatusChange = (value) => {
-  const label = getDictLabel("USER_STATUS", value);
+  const label = getDictLabel("USER_STATUS_DICT", value);
   MessagePlugin.info(`选择了用户状态: ${label}`);
 };
 

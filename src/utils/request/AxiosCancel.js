@@ -5,10 +5,19 @@ import { isFunction } from "lodash-es";
 let pendingMap = new Map();
 
 /**
- * 获取请求Url
+ * 获取请求Url（优化后：包含params参数）
  * @param config
  */
-export const getPendingUrl = (config) => [config.method, config.url].join("&");
+export const getPendingUrl = (config) => {
+  // 确保params存在（默认空对象）
+  const params = config.params || {};
+  // 对params的键排序，避免参数顺序不同导致标识不一致
+  const sortedKeys = Object.keys(params).sort();
+  // 将params转换为"key1=value1&key2=value2"格式的字符串
+  const paramsStr = sortedKeys.map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`).join("&");
+  // 拼接method、url、paramsStr作为唯一标识
+  return [config.method, config.url, paramsStr].join("&");
+};
 
 /**
  * @description 请求管理器

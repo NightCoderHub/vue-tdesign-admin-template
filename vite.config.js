@@ -26,10 +26,11 @@ export default defineConfig({
     vueJsx(),
     svgLoader(),
     viteCompression({
+      disable: true, // 禁用压缩
       algorithm: "gzip", // 指定使用 brotli 进行压缩
       ext: ".gz", // 压缩后的文件扩展名
       deleteOriginFile: false, // 是否删除原文件
-      threshold: 10240, // 只处理大于此大小的资源（单位：字节）
+      threshold: 1024 * 50, // 只处理大于此大小的资源（单位：字节）
     }),
     viteMockServe({
       mockPath: "mock", // 指定mock文件存放目录
