@@ -11,6 +11,7 @@ export const useUserStore = defineStore("user", {
     isRefreshing: false, // 标记是否正在刷新token
     failedQueue: [], // 存储待重试的请求回调
     tokenType: "Bearer",
+    permissions: [], // 用户权限列表
   }),
   actions: {
     async login(userInfo) {
