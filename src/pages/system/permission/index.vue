@@ -60,8 +60,6 @@ import { listToTreeIterative, filterTree } from "@/utils/utils";
 import { Tag, Icon, MessagePlugin } from "tdesign-vue-next";
 import { cloneDeep } from "lodash-es";
 
-// import  MenuFormDialogComponent from './components/form/MenuFormDialog.vue';
-
 const columns = ref([
   {
     title: "菜单名称",
@@ -200,12 +198,12 @@ const fetchMenuData = async () => {
   menuTree.value = filterTree(tableData.value, (node) => node.type === 1 || node.type === 2);
 };
 
-const treeConfig = ref({
+const treeConfig = {
   checkStrictly: true,
   childrenKey: "children",
   treeNodeColumnIndex: 0,
   expandTreeNodeOnClick: true,
-});
+};
 
 // 弹窗相关
 const dialogVisible = ref(false);

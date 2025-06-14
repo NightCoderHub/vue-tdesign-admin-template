@@ -9,7 +9,8 @@ export default [
     meta: {
       title: "仪表盘",
       icon: "dashboard",
-      orderNo: 0,
+      sort: 0,
+      single: true,
     },
     children: [
       {

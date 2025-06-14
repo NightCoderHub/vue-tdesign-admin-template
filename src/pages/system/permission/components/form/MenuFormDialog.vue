@@ -51,7 +51,7 @@
       </t-form-item>
 
       <t-form-item v-if="visibleFormItems.permission" label="权限标识" name="permission">
-        <t-input v-model="formData.permission" placeholder="请输入权限标识 (多个用逗号分隔)"></t-input>
+        <t-input v-model="formData.permission" placeholder="请输入权限标识"></t-input>
       </t-form-item>
 
       <t-form-item v-if="visibleFormItems.icon" label="图标" name="icon">
@@ -110,6 +110,20 @@
 </template>
 
 <script setup>
+/**
+ * 路由meta对象参数，我们通常将属性放到meta对象中
+ * meta: {
+ *   title:     菜单栏以及 tabsView 栏、菜单搜索名称（国际化）
+ *   hide:      是否隐藏此路由，不会显示在菜单树，可以访问
+ *   disable:   是否停用，不会显示在菜单树，且不可访问
+ *   keepAlive: 是否缓存组件状态
+ *   affix:     是否固定在 tabsView 栏上
+ *   link:      是否是超链接菜单，开启外链条件：1、 link：链接地址不为空  2、iframe: false
+ *   iframe:    是否内嵌窗口，开启条件：1、iframe：true  2、link：链接地址不为空
+ *   icon:      菜单图标
+ *   sort:      菜单顺序
+ * }
+ */
 import { ref, reactive, computed, watch } from "vue";
 import { MessagePlugin } from "tdesign-vue-next";
 import { cloneDeep } from "lodash-es";
@@ -152,7 +166,6 @@ const defaultFormData = {
   id: null,
   type: 1, // 默认目录
   parentId: "",
-  svgIcon: "",
   icon: "",
   name: "",
   title: "",
@@ -270,7 +283,6 @@ const submitForm = async () => {
           link: formData.isLink ? formData.link : "",
           iframe: formData.iframe,
           permission: formData.permission,
-          svgIcon: formData.svgIcon,
           icon: formData.icon,
           sort: formData.sort,
           type: formData.type,

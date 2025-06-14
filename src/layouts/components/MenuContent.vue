@@ -6,6 +6,9 @@
           {{ item.title }}
         </t-menu-item>
         <t-menu-item v-else :name="item.path" :value="getPath(item)" :to="item.path">
+          <template #icon>
+            <t-icon :name="item.icon" />
+          </template>
           {{ item.title }}
         </t-menu-item>
       </template>
@@ -42,9 +45,9 @@ const getRouteList = (list, basePath) => {
   if (!list || list.length === 0) {
     return [];
   }
-  // 如果meta中有orderNo则按照从小到大排序
+  // 如果meta中有sort则按照从小到大排序
   list.sort((a, b) => {
-    return (a.meta?.orderNo || 0) - (b.meta?.orderNo || 0);
+    return (a.meta?.sort || 0) - (b.meta?.sort || 0);
   });
   return list
     .map((item) => {
