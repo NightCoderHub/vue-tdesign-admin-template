@@ -47,3 +47,13 @@ export function getUserInfoApi() {
     url: "/user/info", // 假设用户信息接口路径为/user/info
   });
 }
+
+/**
+ * 获取当前用户权限列表
+ * @returns {Promise<{ permissions: string[] }>} 权限列表（如 ['user:view', 'menu:edit']）
+ */
+export function getUserPermissionsApi() {
+  return request.get({
+    url: "/api/permissions",
+  });
+}
