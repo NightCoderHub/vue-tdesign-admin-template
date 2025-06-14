@@ -82,19 +82,19 @@
       </t-form-item>
 
       <t-form-item v-if="visibleFormItems.hide" label="是否隐藏" name="hide">
-        <t-checkbox v-model="formData.hide">隐藏</t-checkbox>
+        <t-switch v-model="formData.hide"></t-switch>
       </t-form-item>
 
       <t-form-item v-if="visibleFormItems.disable" label="是否禁用" name="disable">
-        <t-checkbox v-model="formData.disable">禁用</t-checkbox>
+        <t-switch v-model="formData.disable"></t-switch>
       </t-form-item>
 
       <t-form-item v-if="visibleFormItems.keepAlive" label="是否缓存" name="keepAlive">
-        <t-checkbox v-model="formData.keepAlive">缓存</t-checkbox>
+        <t-switch v-model="formData.keepAlive"></t-switch>
       </t-form-item>
 
       <t-form-item v-if="visibleFormItems.isLink" label="是否外链" name="isLink">
-        <t-checkbox v-model="formData.isLink">外链</t-checkbox>
+        <t-switch v-model="formData.isLink"></t-switch>
       </t-form-item>
 
       <t-form-item v-if="visibleFormItems.link && formData.isLink" label="外链地址" name="link">
@@ -102,10 +102,9 @@
       </t-form-item>
 
       <t-form-item v-if="visibleFormItems.iframe" label="是否内嵌" name="iframe">
-        <t-checkbox v-model="formData.iframe">内嵌</t-checkbox>
+        <t-switch v-model="formData.iframe"></t-switch>
       </t-form-item>
     </t-form>
-    <div ref="dialogBodyRef" style="display: none"></div>
   </t-dialog>
 </template>
 
@@ -210,6 +209,15 @@ watch(
       if (formData.parentId === null) {
         formData.parentId = "";
       }
+      // 如果 meta.link 有值，则将 isLink 设置为 true
+      // 注意：这里需要确保 newVal.meta 存在且 newVal.meta.link 存在
+      if (newVal.link) {
+        formData.isLink = true;
+        formData.link = newVal.link; // 确保 link 值也被正确设置
+      } else {
+        formData.isLink = false;
+        formData.link = ""; // 如果没有 link，也清空 link 字段
+      }
     } else {
       // 如果 initialData 为空，则重置为默认值 (用于新增)
       Object.assign(formData, cloneDeep(defaultFormData));
@@ -313,11 +321,6 @@ const filterTreeSelect = (filterWord, node) => {
 
 // Popover 可见性
 const popupVisible = ref(false);
-
-// 用于 Popup 挂载的 DOM 元素引用
-// Popover 通常会自动处理挂载点，但 Popup 在 Dialog 内部时，
-// 最好指定 attach 到 Dialog 的 body 内部，以避免 z-index 或定位问题
-const dialogBodyRef = ref(null);
 
 // Popup 显示/隐藏状态改变时
 const onPopupVisibleChange = (val, { trigger }) => {
