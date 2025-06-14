@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { usePermissionStore, useTabsRouterStore } from "@/store";
-import { getTokenApi, getUserInfoApi, refreshTokenApi, revokeTokenApi } from "@/api/user";
+import { getTokenApi, getUserInfoApi, refreshTokenApi, revokeTokenApi, getUserPermissionsApi } from "@/api/user";
 import { aesEncrypt, aesDecrypt } from "@/utils/crypto";
 
 export const useUserStore = defineStore("user", {
@@ -29,6 +29,7 @@ export const useUserStore = defineStore("user", {
       try {
         const res = await getUserInfoApi();
         this.userInfo = res;
+        await this.fetchPermissions();
         return res;
       } catch (error) {
         throw new Error("获取用户信息失败：" + error.message);
@@ -72,6 +73,21 @@ export const useUserStore = defineStore("user", {
         error ? reject(error) : resolve(token);
       });
       this.failedQueue = [];
+    },
+
+    // 设置用户权限的方法
+    setPermissions(perms) {
+      this.permissions = perms;
+    },
+    // 清空权限（例如用户登出时）
+    clearPermissions() {
+      this.permissions = [];
+    },
+    // 加载权限
+    async fetchPermissions() {
+      const fetchedPerms = await getUserPermissionsApi();
+      this.setPermissions(fetchedPerms);
+      return fetchedPerms;
     },
   },
   persist: {
