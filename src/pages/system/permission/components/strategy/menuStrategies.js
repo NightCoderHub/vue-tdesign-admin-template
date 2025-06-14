@@ -11,7 +11,6 @@ const baseMenuStrategy = {
       path: true,
       name: true,
       component: true,
-      permission: true,
       icon: true,
       svgIcon: true, // 如果需要显示
       sort: true,
@@ -22,6 +21,7 @@ const baseMenuStrategy = {
       isLink: true,
       link: true, // link依赖isLink
       iframe: true,
+      permission: false,
     };
   },
   // 定义校验规则
@@ -37,9 +37,14 @@ const baseMenuStrategy = {
           required: true,
           message: "外链地址不能为空",
           trigger: "blur",
-          validator: (val, { formData }) => {
-            return formData.isLink ? val && val.trim() !== "" : true;
+        },
+        {
+          url: {
+            protocols: ["http", "https"],
+            require_valid_protocol: true,
           },
+          message: "请输入正确的外链地址",
+          trigger: "blur",
         },
       ],
       // permission 默认不是必填，由具体策略决定
@@ -62,11 +67,11 @@ const directoryMenuStrategy = {
       title: true,
       path: true, // 目录也有路径
       name: true, // 目录也有名称
-      permission: true,
       icon: true,
       svgIcon: true,
       sort: true,
       // 目录不显示以下项
+      permission: false,
       hide: false,
       disable: false,
       keepAlive: false,
