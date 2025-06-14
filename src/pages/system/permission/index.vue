@@ -1,12 +1,21 @@
 <template>
   <div>
-    <t-button @click="handleAdd">
-      <template #icon>
-        <t-icon name="add"></t-icon>
+    <t-card title="菜单管理" :bordered="false" :hover-shadow="true">
+      <template #actions>
+        <t-space>
+          <t-button @click="handleAdd">
+            <template #icon>
+              <t-icon name="add"></t-icon>
+            </template>
+            新增菜单
+          </t-button>
+          <t-button theme="default" @click="refreshDictList">
+            <template #icon><t-icon name="refresh" /></template>
+            刷新
+          </t-button>
+        </t-space>
       </template>
-      新增
-    </t-button>
-    <t-card size="small" :bordered="false" :hover-shadow="true">
+
       <t-enhanced-table
         max-height="700px"
         bordered

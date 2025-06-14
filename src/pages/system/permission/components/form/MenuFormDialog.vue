@@ -279,7 +279,7 @@ const submitForm = async () => {
       emit("confirm", cloneDeep(submitData)); // 触发 confirm 事件，传递提交数据
       internalDialogVisible.value = false; // 关闭弹窗
     } else {
-      MessagePlugin.error("请检查表单填写");
+      //  MessagePlugin.error("请检查表单填写");
     }
   } catch (error) {
     console.error("提交表单出错:", error);
