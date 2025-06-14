@@ -7,7 +7,7 @@
     </t-tabs>
 
     <div class="search-area">
-      <t-input v-model="searchKeyword" placeholder="输入英文或中文关键词搜索图标" clearable @input="handleSearch">
+      <t-input v-model="searchKeyword" placeholder="输入英文或中文关键词搜索图标" clearable>
         <template #suffix-icon>
           <t-icon name="search" />
         </template>
@@ -75,14 +75,6 @@ const currentStyleCategories = computed(() => {
   return categories;
 });
 
-// 侦听器：确保当主 Tab 切换时，activeCategoryTab 保持有效或默认选中“全部”
-// 当 currentStyleCategories 变化时（意味着 activeStyleTab 变化），检查 activeCategoryTab
-// watch(currentStyleCategories, (newCategories) => {
-//   if (!newCategories.some((cat) => cat.value === activeCategoryTab.value)) {
-//     activeCategoryTab.value = "all";
-//   }
-// }, { immediate: true }); // immediate: true 确保在组件初始化时也执行一次检查
-
 // 计算属性：获取当前选中风格和分类下的图标 (处理“全部”逻辑)
 const currentIconsByCategory = computed(() => {
   const styleData = allIconData[activeStyleTab.value];
@@ -126,16 +118,11 @@ const filteredIcons = computed(() => {
 const handleStyleTabChange = (value) => {
   activeStyleTab.value = value;
   searchKeyword.value = "";
-  activeCategoryTab.value = "all";
 };
 
 const handleCategoryTabChange = (value) => {
   activeCategoryTab.value = value;
   searchKeyword.value = "";
-};
-
-const handleSearch = () => {
-  // 搜索关键词改变时，computed 属性 filteredIcons 会自动更新
 };
 
 const handleIconClick = (icon) => {
