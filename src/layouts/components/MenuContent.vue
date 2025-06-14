@@ -62,7 +62,7 @@ const getRouteList = (list, basePath) => {
         redirect: item.redirect,
       };
     })
-    .filter((item) => item.meta && item.meta.hidden !== true);
+    .filter((item) => item.meta && item.meta.hide !== true);
 };
 
 const getHref = (item) => {

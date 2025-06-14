@@ -9,7 +9,7 @@ export default [
     meta: {
       title: "结果页",
       icon: "check-circle",
-      hidden: true,
+      hide: true,
       noCache: true,
     },
     children: [
@@ -19,7 +19,7 @@ export default [
         component: () => import("@/pages/result/success/index.vue"),
         meta: {
           title: "成功页",
-          hidden: true,
+          hide: true,
           noCache: true,
         },
       },
@@ -29,7 +29,7 @@ export default [
         component: () => import("@/pages/result/fail/index.vue"),
         meta: {
           title: "失败页",
-          hidden: true,
+          hide: true,
           noCache: true,
         },
       },
@@ -39,7 +39,7 @@ export default [
         component: () => import("@/pages/result/network-error/index.vue"),
         meta: {
           title: "网络异常",
-          hidden: true,
+          hide: true,
           noCache: true,
         },
       },
@@ -49,7 +49,7 @@ export default [
         component: () => import("@/pages/result/403/index.vue"),
         meta: {
           title: "无权限",
-          hidden: true,
+          hide: true,
           noCache: true,
         },
       },
@@ -59,7 +59,7 @@ export default [
         component: () => import("@/pages/result/404/index.vue"),
         meta: {
           title: "访问页面不存在页",
-          hidden: true,
+          hide: true,
           noCache: true,
         },
       },
@@ -69,7 +69,7 @@ export default [
         component: () => import("@/pages/result/500/index.vue"),
         meta: {
           title: "服务器出错页",
-          hidden: true,
+          hide: true,
           noCache: true,
         },
       },
