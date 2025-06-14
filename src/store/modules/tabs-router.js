@@ -3,10 +3,10 @@ import { store } from "@/store";
 
 const homeRoute = [
   {
-    path: "/dashboard/base",
+    path: "/welcome/index",
     routeIdx: 0,
-    title: "仪表盘",
-    name: "DashboardBase",
+    title: "欢迎",
+    name: "WelcomeIndex",
     isHome: true,
     isAlive: true,
   },

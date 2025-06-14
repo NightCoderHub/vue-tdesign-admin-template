@@ -5,7 +5,7 @@
     <div class="result-success-describe">可以联系负责人分发应用</div>
     <div>
       <t-button theme="default" @click="() => $router.push('/detail/advanced')"> 查看进度 </t-button>
-      <t-button @click="() => $router.push('/dashboard/base')"> 回到首页 </t-button>
+      <t-button @click="() => $router.push('/welcome')"> 回到欢迎页 </t-button>
     </div>
   </div>
 </template>

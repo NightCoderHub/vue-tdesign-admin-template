@@ -60,7 +60,7 @@ const onSubmit = async ({ validateResult }) => {
       await userStore.login(formData.value);
       MessagePlugin.success("登录成功");
       const redirect = route.query.redirect;
-      const redirectUrl = redirect ? decodeURIComponent(redirect) : "/dashboard";
+      const redirectUrl = redirect ? decodeURIComponent(redirect) : "/";
       router.push(redirectUrl);
     } catch (e) {
       MessagePlugin.error(e.message);

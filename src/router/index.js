@@ -16,7 +16,7 @@ const defaultRouterList = [
   },
   {
     path: "/",
-    redirect: "/dashboard/base",
+    redirect: "/welcome",
   },
 ];
 
