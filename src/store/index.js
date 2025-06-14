@@ -12,6 +12,5 @@ export * from "./modules/setting";
 export * from "./modules/tabs-router";
 export * from "./modules/user";
 export * from "./modules/dictionary";
-export * from "./modules/form";
 
 export default store;
