@@ -33,7 +33,6 @@ export default [
       title: "仪表盘",
       icon: "dashboard",
       sort: 0,
-      single: true,
     },
     children: [
       {

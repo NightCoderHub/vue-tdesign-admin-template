@@ -13,6 +13,10 @@
             <template #icon><t-icon name="refresh" /></template>
             刷新
           </t-button>
+          <t-button theme="default" @click="onExport">
+            <template #icon><t-icon name="file-export" /></template>
+            导出
+          </t-button>
         </t-space>
       </template>
 
@@ -55,10 +59,12 @@
 
 <script setup lang="jsx">
 import { ref, onBeforeMount, defineAsyncComponent, shallowRef } from "vue";
-import { getMenuData } from "@/api/menu.js";
-import { listToTreeIterative, filterTree } from "@/utils/utils";
 import { Tag, Icon, MessagePlugin } from "tdesign-vue-next";
 import { cloneDeep } from "lodash-es";
+import { getMenuData } from "@/api/menu.js";
+import { listToTreeIterative, filterTree } from "@/utils/utils";
+import { exportExcel } from '@/utils/excelExport';
+
 
 const columns = ref([
   {
@@ -405,8 +411,22 @@ const findNodeById = (tree, id) => {
   }
   return null;
 };
+const handleRowClick = () => { };
 
-const handleRowClick = () => {};
+const onExport = async () => {
+  const data = tableData.value.map(item => ({ // 假设 permissionList 是你要导出的数据源
+    id: item.id,
+    name: item.title,
+    // 添加更多你希望导出的字段
+  }));
+  const header = ['id', 'name']; // 导出表格的列名
+  try {
+    await exportExcel(data, header, '权限列表.xlsx');
+    MessagePlugin.success('导出成功');
+  } catch (error) {
+    MessagePlugin.error(`导出失败: ${error.message}`);
+  }
+};
 </script>
 
 <style scoped>
