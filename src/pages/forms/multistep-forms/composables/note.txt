@@ -1,0 +1,17 @@
+专门为这个多步骤表单服务的组合式函数
+
+useFormNavigation.js
+这个功能逻辑用专业的词汇来说，属于表单状态持久化 (Form State Persistence) 和用户会话管理 (User Session Management) 的范畴，具体到用户提示部分，涉及交互确认 (User Confirmation)。
+
+表单状态持久化 (Form State Persistence): 指的是将用户在表单中填写的数据，在用户不完成提交的情况下，保存到本地存储（如 localStorage 或 sessionStorage），以便用户下次访问时可以恢复。
+用户会话管理 (User Session Management): 在更广义的语境下，它可以指管理用户在应用中的活动状态，包括未完成的任务（如表单填写）。本地存储表单进度就是其中一种轻量级的会话管理方式。
+交互确认 (User Confirmation): 指的是在关键操作（如离开页面或覆盖数据）前，通过弹窗等方式向用户确认意图，以避免数据丢失或误操作。
+是否把代码逻辑写在 composables/useFormNavigation.js 中？
+是的，将这部分代码逻辑写在 composables/useFormNavigation.js 中是非常合适的，甚至可以说是推荐的最佳实践。
+
+理由如下：
+
+职责分离： useFormNavigation.js 这个名称本身就暗示了它将处理与表单导航相关的逻辑。保存/读取进度，以及在导航事件中进行用户确认，都属于导航范畴。
+可复用性： 尽管当前是针对特定多步骤表单，但类似的保存/读取逻辑可能在其他复杂表单中也能复用。将其封装在 composable 中，可以方便地在不同组件中引入和使用。
+逻辑内聚： 所有与表单导航、用户会话、状态持久化相关的逻辑都集中在一个地方，使得代码更易于维护和理解。
+与 Vue Router 结合： 在用户离开路由时进行提示，需要用到 Vue Router 的导航守卫（beforeRouteLeave），而 composable 可以很好地封装这种与 Vue Router 相关的逻辑。
