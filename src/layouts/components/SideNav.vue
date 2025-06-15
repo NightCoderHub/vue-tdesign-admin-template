@@ -7,9 +7,6 @@
         </span>
       </template>
       <menu-content :nav-data="menu" />
-      <template #operations>
-        <span class="version-container"> {{ !collapsed ? "TDesign Starter" : "" }} {{ pgk.version }} </span>
-      </template>
     </t-menu>
     <div :class="`side-nav-placeholder${collapsed ? '-hidden' : ''}`"></div>
   </div>
@@ -25,7 +22,6 @@ import AssetLogo from "@/assets/assets-t-logo.svg?component";
 import { getActive, getRoutesExpanded } from "@/router";
 import { useSettingStore } from "@/store";
 
-import pgk from "../../../package.json";
 import MenuContent from "./MenuContent.vue";
 
 const MIN_POINT = 992 - 1;
