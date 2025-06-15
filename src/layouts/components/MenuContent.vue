@@ -6,9 +6,6 @@
           {{ item.title }}
         </t-menu-item>
         <t-menu-item v-else :name="item.path" :value="getPath(item)" :to="item.path">
-          <template #icon>
-            <t-icon :name="item.icon" />
-          </template>
           {{ item.title }}
         </t-menu-item>
       </template>
