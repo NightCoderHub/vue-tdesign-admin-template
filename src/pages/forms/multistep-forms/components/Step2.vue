@@ -7,13 +7,13 @@
     <div v-if="formStore.step1.userType === 'personal'">
       <h4>Personal Details</h4>
       <label>
-        Name:
-        <input type="text" v-model="formStore.step2.personalDetails.name" />
+        firstName:
+        <input type="text" v-model="formStore.step1.personalInfo.firstName" />
       </label>
       <br />
       <label>
-        Date of Birth:
-        <input type="date" v-model="formStore.step2.personalDetails.dob" />
+        lastName:
+        <input type="text" v-model="formStore.step1.personalInfo.lastName" />
       </label>
     </div>
 
@@ -36,6 +36,6 @@
 </template>
 
 <script setup>
-import { useMultiStepFormStore } from '@/store';
+import { useMultiStepFormStore } from '../stores/multiStepForm';
 const formStore = useMultiStepFormStore();
 </script>

@@ -1,7 +1,7 @@
 // composables/useMultiStepLinkage.js  联动协调器 (策略模式的上下文)
 import { watch } from 'vue';
-import { useMultiStepFormStore } from '@/store';
-import { applyLinkageStrategy } from '@/strategies/crossStepLinkageStrategies';
+import { useMultiStepFormStore } from '../stores/multiStepForm';
+import { applyLinkageStrategy } from '../strategies/crossStepLinkageStrategies';
 
 export function useMultiStepLinkage() {
   const formStore = useMultiStepFormStore();

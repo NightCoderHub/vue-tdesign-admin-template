@@ -14,6 +14,6 @@
 </template>
 
 <script setup>
-import { useMultiStepFormStore } from '@/store';
+import { useMultiStepFormStore } from '../stores/multiStepForm';
 const formStore = useMultiStepFormStore();
 </script>

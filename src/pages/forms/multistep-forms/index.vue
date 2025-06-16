@@ -27,9 +27,9 @@
 </template>
 
 <script setup>
-import { useMultiStepFormStore } from '@/store';
-import { useMultiStepLinkage } from '@/composables/useMultiStepLinkage'; // 引入联动协调器
+import { useMultiStepFormStore } from './stores/multiStepForm';
 import { useFormNavigation } from './composables/useFormNavigation';
+import { useMultiStepLinkage } from './composables/useMultiStepLinkage';
 
 // 导入步骤组件
 import Step1 from './components/Step1.vue';

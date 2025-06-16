@@ -2,7 +2,7 @@
 
 import { onMounted, onUnmounted, ref } from 'vue';
 import { useRoute, useRouter, onBeforeRouteLeave } from 'vue-router';
-import { useMultiStepFormStore } from '../stores/multistepFormStore'; // 导入你的 Pinia Store
+import { useMultiStepFormStore } from '../stores/multiStepForm';
 
 const LOCAL_STORAGE_KEY = 'multiStepFormProgress';
 
