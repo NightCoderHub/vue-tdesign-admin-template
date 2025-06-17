@@ -25,11 +25,10 @@
       placeholder="请输入毕业年份"
     ></t-input-number>
   </t-form-item>
-
   <t-divider align="left">工作经历</t-divider>
-  <div v-for="(exp, index) in workExperiences" :key="index">
+  <div v-for="(, index) in workExperiences" :key="index">
     <WorkExperienceForm
-      :experience="exp"
+      v-model:experience="workExperiences[index]"
       :index="index"
       :can-remove="workExperiences.length > 1"
       @remove="removeWorkExperience(index)"

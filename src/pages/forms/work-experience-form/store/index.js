@@ -1,43 +1,43 @@
 // store/index.js
 
-import { defineStore } from 'pinia';
+import { defineStore } from "pinia";
 
-export const useRegistrationStore = defineStore('registration', {
+export const useRegistrationStore = defineStore("registration", {
   state: () => ({
     step1: {
-      name: '李迅',
-      gender: '男',
+      name: "李迅",
+      gender: "男",
       age: 15,
-      phoneNumber: '18508519561',
-      email: '321731029@qq.com',
-      region: '贵州省',
+      phoneNumber: "18508519561",
+      email: "321731029@qq.com",
+      region: "贵州省",
     },
     step2: {
-      highestEducation: '',
-      major: '',
+      highestEducation: "",
+      major: "",
       graduationYear: null,
       workExperiences: [
         {
-          isEmployed: false,
-          companyName: '',
-          jobTitle: '',
+          isEmployed: null,
+          companyName: "",
+          jobTitle: "",
           workExperienceYears: null,
-          careerDirection: '',
-        }
+          careerDirection: "",
+        },
       ],
     },
     step3: {
-      primaryInterest: '',
+      primaryInterest: "",
       secondaryInterests: [],
       hasLearningGoal: null,
-      specificLearningGoal: '',
+      specificLearningGoal: "",
       preferredLearningMethod: [],
     },
     step4: {
       recommendedCourses: [],
       selectedCourses: [],
       needsMaterialPack: null,
-      discountCode: '',
+      discountCode: "",
       totalPrice: 0,
     },
     currentStep: 1,
@@ -66,10 +66,10 @@ export const useRegistrationStore = defineStore('registration', {
     addWorkExperienceItem() {
       this.step2.workExperiences.push({
         isEmployed: null,
-        companyName: '',
-        jobTitle: '',
+        companyName: "",
+        jobTitle: "",
         workExperienceYears: null,
-        careerDirection: '',
+        careerDirection: "",
       });
     },
     removeWorkExperienceItem(index) {
@@ -78,39 +78,45 @@ export const useRegistrationStore = defineStore('registration', {
       } else {
         this.step2.workExperiences[0] = {
           isEmployed: null,
-          companyName: '',
-          jobTitle: '',
+          companyName: "",
+          jobTitle: "",
           workExperienceYears: null,
-          careerDirection: '',
+          careerDirection: "",
         };
       }
     },
     setRecommendedCourses(courses) {
-        this.step4.recommendedCourses = courses;
+      this.step4.recommendedCourses = courses;
     },
     setTotalPrice(price) {
-        this.step4.totalPrice = price;
+      this.step4.totalPrice = price;
     },
   },
   getters: {
     currentYear: () => new Date().getFullYear(),
     // 基础联动 getter，不包含复杂业务逻辑
-    shouldShowEmploymentFields: (state) => (index) => {
-      return ['大专', '本科', '硕士', '博士'].includes(state.step2.highestEducation) &&
-             state.step2.graduationYear &&
-             state.step2.graduationYear < new Date().getFullYear();
+    shouldShowEmploymentFields: (state) => () => {
+      return (
+        ["大专", "本科", "硕士", "博士"].includes(state.step2.highestEducation) &&
+        state.step2.graduationYear &&
+        state.step2.graduationYear < new Date().getFullYear()
+      );
     },
     shouldShowLearningGoalFields: (state) => {
       const { primaryInterest } = state.step3;
-      return ['编程', '设计', '语言', '管理'].includes(primaryInterest);
+      return ["编程", "设计", "语言", "管理"].includes(primaryInterest);
     },
     shouldShowMaterialPackOption: (state) => {
       return state.step4.selectedCourses.length > 0;
     },
     shouldShowDiscountCode: (state) => {
       const { highestEducation } = state.step2;
-      const isAnyEmployed = state.step2.workExperiences.some(exp => exp.isEmployed === true);
-      return ['大专', '本科', '硕士', '博士'].includes(highestEducation) || isAnyEmployed || (state.step1.age && state.step1.age > 18);
+      const isAnyEmployed = state.step2.workExperiences.some((exp) => exp.isEmployed === true);
+      return (
+        ["大专", "本科", "硕士", "博士"].includes(highestEducation) ||
+        isAnyEmployed ||
+        (state.step1.age && state.step1.age > 18)
+      );
     },
-  }
+  },
 });
