@@ -24,11 +24,6 @@
         hover
         @page-change="onPageChange"
       >
-        <template #status="{ row }">
-          <t-tag :theme="row.status === '1' ? 'success' : 'danger'" variant="light">
-            {{ row.status === "1" ? "启用" : "禁用" }}
-          </t-tag>
-        </template>
         <template #operation="{ row }">
           <t-space>
             <t-button theme="primary" size="small" @click="handleEditDict(row)"> 编辑 </t-button>
@@ -44,7 +39,7 @@
 
     <t-dialog
       v-model:visible="dictItemsVisible"
-      :header="currentDict.name + ' - 字典项管理'"
+      :header="currentDict.dictName + ' - 字典项管理'"
       width="900px"
       :footer="false"
     >
@@ -105,20 +100,14 @@
     >
       <template #body>
         <t-form ref="dictFormRef" :data="dictForm" :rules="dictFormRules" label-width="100px" @submit="submitDictForm">
-          <t-form-item label="字典类型" name="type">
-            <t-input v-model="dictForm.type" placeholder="请输入字典类型，如：USER_STATUS" :disabled="isEdit" />
+          <t-form-item label="字典名称" name="dictName">
+            <t-input v-model="dictForm.dictName" placeholder="请输入字典名称，如：用户状态"  />
           </t-form-item>
-          <t-form-item label="字典名称" name="name">
-            <t-input v-model="dictForm.name" placeholder="请输入字典名称，如：用户状态" />
+          <t-form-item label="字典编码" name="dictCode">
+            <t-input v-model="dictForm.dictCode" placeholder="请输入字典编码，如：USER_STATUS" :disabled="isEdit" />
           </t-form-item>
           <t-form-item label="字典描述" name="description">
             <t-textarea v-model="dictForm.description" placeholder="请输入字典描述" />
-          </t-form-item>
-          <t-form-item label="状态" name="status">
-            <t-radio-group v-model="dictForm.status">
-              <t-radio value="1">启用</t-radio>
-              <t-radio value="0">禁用</t-radio>
-            </t-radio-group>
           </t-form-item>
           <t-form-item label="备注" name="remark">
             <t-textarea v-model="dictForm.remark" placeholder="请输入备注信息" />
@@ -144,9 +133,6 @@
           label-width="100px"
           @submit="submitDictItemForm"
         >
-          <t-form-item label="字典类型" name="type">
-            <t-input v-model="dictItemForm.type" disabled />
-          </t-form-item>
           <t-form-item label="字典值" name="value">
             <t-input v-model="dictItemForm.value" placeholder="请输入字典值，如：1" :disabled="isItemEdit" />
           </t-form-item>
@@ -184,14 +170,10 @@
 import { ref, reactive, onMounted, computed } from "vue";
 import { MessagePlugin } from "tdesign-vue-next";
 import { DICTIONARY_MAPS } from "@/constants/dictionary";
-
-// Correct placement for defineOptions
-defineOptions({
-  name: "DictionaryManagement",
-});
+import { getDictionaryList, getDictionaryItemList } from "@/api/dictionaries";
 
 // 字典类型列表
-const allDictTypeList = ref([]); // Store all dictionary types
+const paginatedDictTypeList = ref([]); // Store all dictionary types
 const loading = ref(false);
 const pagination = reactive({
   current: 1,
@@ -199,13 +181,6 @@ const pagination = reactive({
   total: 0,
   showJumper: true,
   showPageSize: true,
-});
-
-// Computed property for paginated dictionary type list
-const paginatedDictTypeList = computed(() => {
-  const start = (pagination.current - 1) * pagination.pageSize;
-  const end = start + pagination.pageSize;
-  return allDictTypeList.value.slice(start, end);
 });
 
 // 字典项列表
@@ -223,7 +198,6 @@ const initialDictFormState = {
   type: "",
   name: "",
   description: "",
-  status: "1",
   remark: "",
 };
 const dictForm = reactive({ ...initialDictFormState });
@@ -246,8 +220,8 @@ const dictItemForm = reactive({ ...initialDictItemFormState });
 
 // 表单校验规则
 const dictFormRules = {
-  type: [{ required: true, message: "请输入字典类型", trigger: "blur" }],
-  name: [{ required: true, message: "请输入字典名称", trigger: "blur" }],
+  dictName: [{ required: true, message: "请输入字典名称", trigger: "blur" }],
+  dictCode: [{ required: true, message: "请输入字典编码", trigger: "blur" }],
 };
 
 const dictItemFormRules = {
@@ -258,11 +232,10 @@ const dictItemFormRules = {
 
 // 字典类型表格列定义
 const dictTypeColumns = [
-  { colKey: "type", title: "字典类型", width: 180 },
-  { colKey: "name", title: "字典名称", width: 150 },
+  { colKey: "dictName", title: "字典名称", width: 150 },
+  { colKey: "dictCode", title: "字典编码", width: 150 },
   { colKey: "description", title: "描述" },
   { colKey: "remark", title: "备注" },
-  { colKey: "status", title: "状态", width: 100, cell: { col: "status" } },
   { colKey: "operation", title: "操作", width: 180, fixed: "right", cell: { col: "operation" } },
 ];
 
@@ -285,23 +258,12 @@ onMounted(() => {
 // 加载字典类型列表
 const loadDictTypeList = () => {
   loading.value = true;
-
-  // 模拟从后端获取字典类型列表
-  setTimeout(() => {
-    const dictTypes = Object.keys(DICTIONARY_MAPS).map((type) => {
-      return {
-        type,
-        name: getDictTypeName(type),
-        description: `${type}字典`,
-        status: "1",
-        remark: "",
-      };
-    });
-
-    allDictTypeList.value = dictTypes; // Store all data
-    pagination.total = dictTypes.length;
+  getDictionaryList().then((res) => {
+    paginatedDictTypeList.value = res.list
+    pagination.total = res.total;
+  }).finally(() => {
     loading.value = false;
-  }, 500);
+  });
 };
 
 // 获取字典类型名称
@@ -323,8 +285,6 @@ const getDictTypeName = (type) => {
 const onPageChange = (pageInfo) => {
   pagination.current = pageInfo.current;
   pagination.pageSize = pageInfo.pageSize;
-  // No need to reload data if all data is already in allDictTypeList.value
-  // The computed property paginatedDictTypeList will react to these changes.
 };
 
 // 刷新字典列表
@@ -333,30 +293,36 @@ const refreshDictList = () => {
   MessagePlugin.success("刷新成功");
 };
 
-// 查看字典项
+// 加载字典项列表
 const handleViewItems = (row) => {
   currentDict.value = row;
   dictItemsVisible.value = true;
-  loadDictItemList(row.type);
-};
-
-// 加载字典项列表
-const loadDictItemList = (type) => {
   itemsLoading.value = true;
-
-  // 从DICTIONARY_MAPS中获取字典项
-  setTimeout(() => {
-    const items = DICTIONARY_MAPS[type] || [];
-    dictItemList.value = items;
+  getDictionaryItemList(row.dictCode).then((list) => {
+    dictItemList.value = list;
+  }).finally(() => {
     itemsLoading.value = false;
-  }, 300);
+  });
 };
+
 
 // 新增字典
 const handleAddDict = () => {
   isEdit.value = false;
   Object.assign(dictForm, initialDictFormState); // Reset form using initial state
   dictFormVisible.value = true;
+   dictFormRef.value?.validate().then((result) => {
+    if (result === true) {
+      if (isEdit.value) {
+        MessagePlugin.success("编辑成功");
+      } else {
+        MessagePlugin.success("新增成功");
+      }
+
+      dictFormVisible.value = false;
+      Object.assign(dictForm, initialDictFormState); // Reset form after successful submission
+    }
+  });
 };
 
 // 编辑字典
@@ -367,14 +333,8 @@ const handleEditDict = (row) => {
 };
 
 // 删除字典
-const handleDeleteDict = (row) => {
-  // 模拟删除操作
-  const index = allDictTypeList.value.findIndex((item) => item.type === row.type);
-  if (index > -1) {
-    allDictTypeList.value.splice(index, 1);
-    pagination.total = allDictTypeList.value.length; // Update total after deletion
-    MessagePlugin.success("删除成功");
-  }
+const handleDeleteDict = (row) => {MessagePlugin.success("删除成功");
+
 };
 
 // 关闭字典表单
@@ -389,21 +349,8 @@ const submitDictForm = () => {
   dictFormRef.value?.validate().then((result) => {
     if (result === true) {
       if (isEdit.value) {
-        // 编辑
-        const index = allDictTypeList.value.findIndex((item) => item.type === dictForm.type);
-        if (index > -1) {
-          allDictTypeList.value[index] = { ...dictForm };
-        }
         MessagePlugin.success("编辑成功");
       } else {
-        // 新增
-        // Check for duplicate type before adding (optional but good practice)
-        if (allDictTypeList.value.some((item) => item.type === dictForm.type)) {
-          MessagePlugin.error("字典类型已存在，请修改");
-          return;
-        }
-        allDictTypeList.value.push({ ...dictForm });
-        pagination.total = allDictTypeList.value.length; // Update total after addition
         MessagePlugin.success("新增成功");
       }
 

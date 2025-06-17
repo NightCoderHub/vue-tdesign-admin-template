@@ -30,3 +30,15 @@ export function deleteDictionary(dictId) {
     url: `/api/dictionaries/${dictId}`,
   });
 }
+
+// 查询字典项（根据ID）
+
+
+export function getDictionaryItemList(dictCode) {
+  return request.get({
+    url: `/api/dictionaries/items`,
+    params: {
+      dictCode
+    }
+  });
+}
