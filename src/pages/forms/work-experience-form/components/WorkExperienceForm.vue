@@ -49,7 +49,7 @@ defineEmits(["remove"]);
 // 当你修改 modelValue.value.someProperty 时，Vue 会自动触发 update:experience 事件
 const modelValue = defineModel("experience", {
   type: Object,
-  default: () => ({ isEmployed: false, companyName: "", jobTitle: "", workExperienceYears: 0, careerDirection: "" }),
+  default: () => ({ isEmployed: null, companyName: "", jobTitle: "", workExperienceYears: null, careerDirection: "" }),
 });
 
 const rules = workExperienceRules;
