@@ -27,9 +27,9 @@ export const useUserStore = defineStore("user", {
 
     async getUserInfo() {
       try {
+        this.fetchPermissions();
         const res = await getUserInfoApi();
         this.userInfo = res;
-        await this.fetchPermissions();
         return res;
       } catch (error) {
         throw new Error("获取用户信息失败：" + error.message);
@@ -41,10 +41,10 @@ export const useUserStore = defineStore("user", {
         revokeTokenApi({ refresh_token: aesDecrypt(this.refreshToken) });
       }
       this.$reset();
-      const permissionStore = usePermissionStore();
-      permissionStore.restoreRoutes();
-      const tabsRouterStore = useTabsRouterStore();
-      tabsRouterStore.removeTabRouterList();
+      usePermissionStore().restoreRoutes();
+      // permissionStore.restoreRoutes();
+      useTabsRouterStore().removeTabRouterList();
+      // tabsRouterStore.removeTabRouterList();
     },
 
     async refreshAuthTokens() {
@@ -84,10 +84,10 @@ export const useUserStore = defineStore("user", {
       this.permissions = [];
     },
     // 加载权限
-    async fetchPermissions() {
-      const fetchedPerms = await getUserPermissionsApi();
-      this.setPermissions(fetchedPerms);
-      return fetchedPerms;
+     fetchPermissions() {
+      getUserPermissionsApi().then(fetchedPerms => {
+         this.setPermissions(fetchedPerms);
+      });
     },
   },
   persist: {
