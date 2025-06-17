@@ -1,14 +1,13 @@
 <template>
   <t-form-item label="最高学历" name="highestEducation">
-    <dict-select v-model="form.highestEducation" type="EDUCATION_LEVEL" placeholder="请选择最高学历"></dict-select>
-    <t-alert
-      v-if="!isAgeValidForEducation"
-      theme="error"
-      title="年龄与学历不符"
-      :message="`您的年龄（${store.step1.age}岁）与所选学历不符。18岁以下用户最高学历只能选择高中及以下。`"
-      class="error-alert"
-    />
+    <dict-select v-model="form.highestEducation" type="EDUCATION_LEVEL" placeholder="请选择最高学历"> </dict-select>
   </t-form-item>
+  <t-alert
+    v-if="!isAgeValidForEducation"
+    theme="error"
+    :message="`您的年龄（${store.step1.age}岁）与所选学历不符。18岁以下用户最高学历只能选择高中及以下。`"
+    class="error-alert"
+  />
   <t-form-item label="专业">
     <t-input v-model="form.major" placeholder="如：计算机科学与技术" @change="suggestCoursesByMajor"></t-input>
     <t-alert
@@ -59,7 +58,6 @@ const { workExperiences, addWorkExperience, removeWorkExperience } = useWorkExpe
 
 // 从 FormValidation Hook 中获取联动校验状态
 const { isAgeValidForEducation } = useFormValidation(store);
-
 const majorSuggestion = ref("");
 
 const suggestCoursesByMajor = () => {
@@ -83,6 +81,9 @@ const suggestCoursesByMajor = () => {
 }
 .error-alert,
 .hint-alert {
-  margin-top: 10px;
+  --form-label-width: 120px;
+  margin-top: -16px;
+  margin-bottom: 10px;
+  margin-left: var(--form-label-width);
 }
 </style>

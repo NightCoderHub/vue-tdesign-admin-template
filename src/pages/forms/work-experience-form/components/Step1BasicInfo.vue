@@ -13,7 +13,7 @@
     <t-input-number v-model="form.age" :min="1" :max="120" placeholder="请输入年龄"></t-input-number>
   </t-form-item>
   <t-form-item label="手机号" name="phoneNumber">
-    <t-input v-model="form.phoneNumber" @blur="autoFillRegion" placeholder="请输入手机号"></t-input>
+    <t-input v-model="form.phoneNumber" placeholder="请输入手机号" @blur="autoFillRegion"></t-input>
   </t-form-item>
   <t-form-item label="邮箱" name="email">
     <t-input v-model="form.email" placeholder="请输入邮箱"></t-input>
@@ -24,10 +24,9 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
-import { useRegistrationStore } from '../store';
-import { Input as TInput, RadioGroup as TRadioGroup, Radio as TRadio, InputNumber as TInputNumber, FormItem as TFormItem } from 'tdesign-vue-next';
-import { simulatePhoneRegionAPI } from '../utils'; // 引入模拟 API
+import { computed } from "vue";
+import { useRegistrationStore } from "../store";
+import { simulatePhoneRegionAPI } from "../utils"; // 引入模拟 API
 
 const store = useRegistrationStore();
 const form = computed({
@@ -39,7 +38,7 @@ const autoFillRegion = async () => {
   const phone = form.value.phoneNumber;
   if (phone) {
     const region = await simulatePhoneRegionAPI(phone); // 模拟 API 调用
-    form.value.region = region || '';
+    form.value.region = region || "";
   }
 };
 </script>
