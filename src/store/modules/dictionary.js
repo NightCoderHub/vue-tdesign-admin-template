@@ -1,6 +1,6 @@
 // 数据字典状态管理
 import { defineStore } from "pinia";
-import { getDictionaryList } from "@/api/dictionaries";
+import { getDictionaryItemList } from "@/api/dictionaries";
 
 // 定义数据字典Store
 export const useDictionaryStore = defineStore("dictionary", {
@@ -82,7 +82,7 @@ export const useDictionaryStore = defineStore("dictionary", {
         this.loadingTypes.push(type);
 
         // 从API获取字典数据
-        const dictData = await getDictionaryList({ type });
+        const dictData = await getDictionaryItemList(type);
 
         // 更新状态
         this.dictionaries[type] = dictData;

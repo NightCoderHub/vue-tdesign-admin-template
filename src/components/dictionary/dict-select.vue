@@ -35,10 +35,6 @@
 import { ref, computed, watch } from "vue";
 import { useDictionary } from "@/hooks/useDictionary";
 
-defineOptions({
-  name: "DictSelect",
-});
-
 const props = defineProps({
   // 字典类型
   type: {
@@ -83,7 +79,7 @@ const props = defineProps({
   // 是否显示标签
   showTag: {
     type: Boolean,
-    default: true,
+    default: false,
   },
   // 自定义类名
   className: {

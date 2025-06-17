@@ -28,7 +28,11 @@
 
     <template v-if="form.hasLearningGoal === true">
       <t-form-item label="具体学习目标" name="specificLearningGoal">
-        <t-textarea v-model="form.specificLearningGoal" placeholder="例如：掌握前端开发技能，转行成为一名Web开发者。" :autosize="{ minRows: 3, maxRows: 5 }"></t-textarea>
+        <t-textarea
+          v-model="form.specificLearningGoal"
+          placeholder="例如：掌握前端开发技能，转行成为一名Web开发者。"
+          :autosize="{ minRows: 3, maxRows: 5 }"
+        ></t-textarea>
       </t-form-item>
       <t-form-item label="偏好的学习方式">
         <t-checkbox-group v-model="form.preferredLearningMethod">
@@ -42,9 +46,8 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
-import { useRegistrationStore } from '../store';
-import { Input as TInput, Select as TSelect, Option as TOption, CheckboxGroup as TCheckboxGroup, Checkbox as TCheckbox, RadioGroup as TRadioGroup, Radio as TRadio, Textarea as TTextarea, FormItem as TFormItem } from 'tdesign-vue-next';
+import { computed } from "vue";
+import { useRegistrationStore } from "../store";
 
 const store = useRegistrationStore();
 const form = computed({
