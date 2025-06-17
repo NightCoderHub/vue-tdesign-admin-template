@@ -96,12 +96,12 @@
       :confirm-btn="{ content: '确定', theme: 'primary' }"
       :cancel-btn="{ content: '取消' }"
       @confirm="submitDictForm"
-      @cancel="closeDictForm"
+      @close="closeDictForm"
     >
       <template #body>
         <t-form ref="dictFormRef" :data="dictForm" :rules="dictFormRules" label-width="100px" @submit="submitDictForm">
           <t-form-item label="字典名称" name="dictName">
-            <t-input v-model="dictForm.dictName" placeholder="请输入字典名称，如：用户状态"  />
+            <t-input v-model="dictForm.dictName" placeholder="请输入字典名称，如：用户状态" />
           </t-form-item>
           <t-form-item label="字典编码" name="dictCode">
             <t-input v-model="dictForm.dictCode" placeholder="请输入字典编码，如：USER_STATUS" :disabled="isEdit" />
@@ -123,7 +123,7 @@
       :confirm-btn="{ content: '确定', theme: 'primary' }"
       :cancel-btn="{ content: '取消' }"
       @confirm="submitDictItemForm"
-      @cancel="closeDictItemForm"
+      @close="closeDictItemForm"
     >
       <template #body>
         <t-form
@@ -167,9 +167,8 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, computed } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { MessagePlugin } from "tdesign-vue-next";
-import { DICTIONARY_MAPS } from "@/constants/dictionary";
 import { getDictionaryList, getDictionaryItemList } from "@/api/dictionaries";
 
 // 字典类型列表
@@ -258,27 +257,14 @@ onMounted(() => {
 // 加载字典类型列表
 const loadDictTypeList = () => {
   loading.value = true;
-  getDictionaryList().then((res) => {
-    paginatedDictTypeList.value = res.list
-    pagination.total = res.total;
-  }).finally(() => {
-    loading.value = false;
-  });
-};
-
-// 获取字典类型名称
-const getDictTypeName = (type) => {
-  const nameMap = {
-    USER_STATUS: "用户状态",
-    GENDER: "性别",
-    ORDER_STATUS: "订单状态",
-    PAYMENT_METHOD: "支付方式",
-    PRIORITY: "优先级",
-    COMMON_STATUS: "通用状态",
-    AUDIT_STATUS: "审核状态",
-  };
-
-  return nameMap[type] || type;
+  getDictionaryList()
+    .then((res) => {
+      paginatedDictTypeList.value = res.list;
+      pagination.total = res.total;
+    })
+    .finally(() => {
+      loading.value = false;
+    });
 };
 
 // 分页变化
@@ -298,31 +284,19 @@ const handleViewItems = (row) => {
   currentDict.value = row;
   dictItemsVisible.value = true;
   itemsLoading.value = true;
-  getDictionaryItemList(row.dictCode).then((list) => {
-    dictItemList.value = list;
-  }).finally(() => {
-    itemsLoading.value = false;
-  });
+  getDictionaryItemList(row.dictCode)
+    .then((list) => {
+      dictItemList.value = list;
+    })
+    .finally(() => {
+      itemsLoading.value = false;
+    });
 };
-
 
 // 新增字典
 const handleAddDict = () => {
   isEdit.value = false;
-  Object.assign(dictForm, initialDictFormState); // Reset form using initial state
   dictFormVisible.value = true;
-   dictFormRef.value?.validate().then((result) => {
-    if (result === true) {
-      if (isEdit.value) {
-        MessagePlugin.success("编辑成功");
-      } else {
-        MessagePlugin.success("新增成功");
-      }
-
-      dictFormVisible.value = false;
-      Object.assign(dictForm, initialDictFormState); // Reset form after successful submission
-    }
-  });
 };
 
 // 编辑字典
@@ -333,14 +307,13 @@ const handleEditDict = (row) => {
 };
 
 // 删除字典
-const handleDeleteDict = (row) => {MessagePlugin.success("删除成功");
-
+const handleDeleteDict = () => {
+  MessagePlugin.success("删除成功");
 };
 
 // 关闭字典表单
 const closeDictForm = () => {
-  dictFormVisible.value = false;
-  Object.assign(dictForm, initialDictFormState); // 重置表单数据
+  dictFormRef.value?.reset(); // 清除表单的验证结果
   dictFormRef.value?.clearValidate(); // 清除表单的验证结果
 };
 
@@ -355,7 +328,7 @@ const submitDictForm = () => {
       }
 
       dictFormVisible.value = false;
-      Object.assign(dictForm, initialDictFormState); // Reset form after successful submission
+      dictFormRef.value?.reset();
     }
   });
 };
@@ -363,7 +336,6 @@ const submitDictForm = () => {
 // 新增字典项
 const handleAddDictItem = () => {
   isItemEdit.value = false;
-  Object.assign(dictItemForm, initialDictItemFormState); // Reset form using initial state
   dictItemForm.type = currentDict.value.type;
   dictItemFormVisible.value = true;
 };
@@ -376,20 +348,14 @@ const handleEditDictItem = (row) => {
 };
 
 // 删除字典项
-const handleDeleteDictItem = (row) => {
-  // 模拟删除操作
-  const index = dictItemList.value.findIndex((item) => item.value === row.value);
-  if (index > -1) {
-    dictItemList.value.splice(index, 1);
-    MessagePlugin.success("删除成功");
-  }
+const handleDeleteDictItem = () => {
+  MessagePlugin.success("删除成功");
 };
 
 // 关闭字典项表单
 const closeDictItemForm = () => {
-  dictItemFormVisible.value = false;
-  Object.assign(dictItemForm, initialDictItemFormState); // 重置表单数据
-  dictItemFormRef.value?.clearValidate(); // 新增：清除表单的验证结果
+  dictItemFormRef.value?.reset();
+  dictItemFormRef.value?.clearValidate();
 };
 
 // 提交字典项表单
@@ -397,25 +363,13 @@ const submitDictItemForm = () => {
   dictItemFormRef.value?.validate().then((result) => {
     if (result === true) {
       if (isItemEdit.value) {
-        // 编辑
-        const index = dictItemList.value.findIndex((item) => item.value === dictItemForm.value);
-        if (index > -1) {
-          dictItemList.value[index] = { ...dictItemForm };
-        }
         MessagePlugin.success("编辑成功");
       } else {
-        // 新增
-        // Check for duplicate value before adding (optional but good practice)
-        if (dictItemList.value.some((item) => item.value === dictItemForm.value)) {
-          MessagePlugin.error("字典值已存在，请修改");
-          return;
-        }
-        dictItemList.value.push({ ...dictItemForm });
         MessagePlugin.success("新增成功");
       }
 
       dictItemFormVisible.value = false;
-      Object.assign(dictItemForm, initialDictItemFormState); // Reset form after successful submission
+      dictItemFormRef.value?.reset();
     }
   });
 };
