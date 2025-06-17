@@ -53,7 +53,7 @@
 import { MessagePlugin } from "tdesign-vue-next";
 import { ref } from "vue";
 
-import { useCounter } from "@/hooks";
+import { useCounter } from "@/hooks/useCounter";
 
 const INITIAL_DATA = {
   phone: "",

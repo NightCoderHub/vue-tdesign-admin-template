@@ -27,7 +27,7 @@ import { DialogPlugin, MessagePlugin } from "tdesign-vue-next";
  * @param {string} [options.dialogConfirmTextLoad='恢复'] 加载弹窗的确认按钮文本。
  * @param {string} [options.dialogCancelTextLoad='放弃'] 加载弹窗的取消按钮文本。
  */
-export function useFormPersistence(options) {
+export function useSimpleFormPersistence(options) {
   const {
     formData: rawFormData,
     piniaStoreInstance, // 新增：接收 Pinia Store 实例
