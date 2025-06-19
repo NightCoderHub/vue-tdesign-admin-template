@@ -41,7 +41,7 @@ export const useRegistrationStore = defineStore("registration", {
       totalPrice: 0,
     },
     currentStep: 1,
-    formSubmitted: false,
+    isFormSubmitted: false,
   }),
   actions: {
     updateStep1(data) {
@@ -60,7 +60,7 @@ export const useRegistrationStore = defineStore("registration", {
       this.currentStep = step;
     },
     setFormSubmitted(status) {
-      this.formSubmitted = status;
+      this.isFormSubmitted = status;
     },
     // 将添加/移除工作经历的逻辑放到 hooks 中
     addWorkExperienceItem() {
