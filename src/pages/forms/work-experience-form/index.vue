@@ -3,5 +3,5 @@
 </template>
 
 <script setup>
-import MultiStepForm from './components/MultiStepForm.vue';
+import MultiStepForm from "./components/MultiStepForm.vue";
 </script>

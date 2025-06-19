@@ -84,9 +84,9 @@ export const useUserStore = defineStore("user", {
       this.permissions = [];
     },
     // 加载权限
-     fetchPermissions() {
-      getUserPermissionsApi().then(fetchedPerms => {
-         this.setPermissions(fetchedPerms);
+    fetchPermissions() {
+      getUserPermissionsApi().then((fetchedPerms) => {
+        this.setPermissions(fetchedPerms);
       });
     },
   },

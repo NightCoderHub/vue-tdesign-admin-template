@@ -12,18 +12,18 @@ export const linkageStrategies = {
     const { userType } = formStore.step1;
     let updates = {};
 
-    if (userType === 'personal') {
+    if (userType === "personal") {
       // 激活个人详情，清空企业详情
-      updates.personalDetails = { name: '', dob: '' };
-      updates.corporateDetails = { companyName: '', taxId: '' }; // 清空或设为初始值
-    } else if (userType === 'corporate') {
+      updates.personalDetails = { name: "", dob: "" };
+      updates.corporateDetails = { companyName: "", taxId: "" }; // 清空或设为初始值
+    } else if (userType === "corporate") {
       // 激活企业详情，清空个人详情
-      updates.personalDetails = { name: '', dob: '' }; // 清空或设为初始值
-      updates.corporateDetails = { companyName: 'Default Corp Name', taxId: '' }; // 设默认值
+      updates.personalDetails = { name: "", dob: "" }; // 清空或设为初始值
+      updates.corporateDetails = { companyName: "Default Corp Name", taxId: "" }; // 设默认值
     } else {
       // 都不选，清空所有
-      updates.personalDetails = { name: '', dob: '' };
-      updates.corporateDetails = { companyName: '', taxId: '' };
+      updates.personalDetails = { name: "", dob: "" };
+      updates.corporateDetails = { companyName: "", taxId: "" };
     }
     // 返回需要更新的 step2 数据
     return { step2: updates };
@@ -32,12 +32,13 @@ export const linkageStrategies = {
   // 策略2: 根据 Step1 的邮箱后缀推荐 Step3 的套餐
   recommendPlanByEmail: (formStore) => {
     const { email } = formStore.step1;
-    let recommendedPlan = 'standard';
+    let recommendedPlan = "standard";
 
-    if (email.endsWith('.edu')) {
-      recommendedPlan = 'student';
-    } else if (email.includes('pro')) { // 假设包含'pro'是专业用户
-      recommendedPlan = 'premium';
+    if (email.endsWith(".edu")) {
+      recommendedPlan = "student";
+    } else if (email.includes("pro")) {
+      // 假设包含'pro'是专业用户
+      recommendedPlan = "premium";
     }
     // 返回需要更新的 step3 数据
     return { step3: { selectedPlan: recommendedPlan } };

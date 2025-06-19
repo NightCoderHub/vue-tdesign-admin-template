@@ -5,12 +5,6 @@
   </div>
 </template>
 
-<script setup>
-import { ref } from 'vue';
+<script setup></script>
 
-const feature = ref();
-</script>
-
-<style lang="css" scoped>
-
-</style>
+<style lang="css" scoped></style>

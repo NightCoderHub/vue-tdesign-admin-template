@@ -33,12 +33,11 @@ export function deleteDictionary(dictId) {
 
 // 查询字典项（根据ID）
 
-
 export function getDictionaryItemList(dictCode) {
   return request.get({
     url: `/api/dictionaries/items`,
     params: {
-      dictCode
-    }
+      dictCode,
+    },
   });
 }

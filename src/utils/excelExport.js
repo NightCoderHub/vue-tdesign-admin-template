@@ -1,13 +1,13 @@
-const worker = new Worker(new URL('./exportWorker.js', import.meta.url), { type: 'module' });
-export function exportExcel(data, header, filename = 'export.xlsx') {
+const worker = new Worker(new URL("./exportWorker.js", import.meta.url), { type: "module" });
+export function exportExcel(data, header, filename = "export.xlsx") {
   return new Promise((resolve, reject) => {
     worker.postMessage({ data, header, filename });
 
     worker.onmessage = (e) => {
       const { status, buffer, filename, type, message } = e.data;
-      if (status === 'success') {
+      if (status === "success") {
         const blob = new Blob([buffer], { type: type });
-        const link = document.createElement('a');
+        const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
         link.download = filename;
         document.body.appendChild(link);
@@ -21,7 +21,7 @@ export function exportExcel(data, header, filename = 'export.xlsx') {
     };
 
     worker.onerror = (error) => {
-      reject(new Error('Web Worker error: ' + error.message));
+      reject(new Error("Web Worker error: " + error.message));
     };
   });
 }

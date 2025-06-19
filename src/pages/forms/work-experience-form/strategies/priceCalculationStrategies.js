@@ -2,7 +2,7 @@
 
 // 策略接口
 class PriceStrategy {
-  calculate(price, state) {
+  calculate() {
     throw new Error("Method 'calculate()' must be implemented.");
   }
 }
@@ -11,15 +11,31 @@ class PriceStrategy {
 class BaseCoursePriceStrategy extends PriceStrategy {
   calculate(price, state) {
     const coursePrices = {
-      '高级数据分析实战': 2000, '资深项目管理认证': 1800, '零基础编程入门': 800, '实用生活英语': 600,
-      'Python Web开发': 1500, '前端框架进阶': 1200, 'UI/UX设计实战': 1600, '平面设计基础': 900,
-      '职业生涯规划': 500, '面试技巧提升': 400, '企业战略管理': 2500, '专业技能进阶': 1300,
-      '高效团队管理': 1600, '商务英语听说': 1000, '青少年兴趣培养': 700, '高管领导力提升': 3000,
-      '职场女性发展': 1100, '大湾区/长三角IT就业指导': 900, 'Java全栈开发': 2200,
-      '产品经理实战': 1900, '高级英语口语': 1200, '大数据处理与分析': 2100,
+      高级数据分析实战: 2000,
+      资深项目管理认证: 1800,
+      零基础编程入门: 800,
+      实用生活英语: 600,
+      "Python Web开发": 1500,
+      前端框架进阶: 1200,
+      "UI/UX设计实战": 1600,
+      平面设计基础: 900,
+      职业生涯规划: 500,
+      面试技巧提升: 400,
+      企业战略管理: 2500,
+      专业技能进阶: 1300,
+      高效团队管理: 1600,
+      商务英语听说: 1000,
+      青少年兴趣培养: 700,
+      高管领导力提升: 3000,
+      职场女性发展: 1100,
+      "大湾区/长三角IT就业指导": 900,
+      Java全栈开发: 2200,
+      产品经理实战: 1900,
+      高级英语口语: 1200,
+      大数据处理与分析: 2100,
     };
     let currentPrice = 0;
-    state.step4.selectedCourses.forEach(course => {
+    state.step4.selectedCourses.forEach((course) => {
       currentPrice += coursePrices[course] || 0;
     });
     return currentPrice;
@@ -41,13 +57,13 @@ class DiscountCodePriceStrategy extends PriceStrategy {
   calculate(price, state) {
     const { discountCode } = state.step4;
     const { highestEducation } = state.step2;
-    const isAnyEmployed = state.step2.workExperiences.some(exp => exp.isEmployed === true);
+    const isAnyEmployed = state.step2.workExperiences.some((exp) => exp.isEmployed === true);
 
-    if (discountCode.toUpperCase() === 'STUDENT80' && ['大专', '本科', '硕士', '博士'].includes(highestEducation)) {
+    if (discountCode.toUpperCase() === "STUDENT80" && ["大专", "本科", "硕士", "博士"].includes(highestEducation)) {
       return price * 0.8;
-    } else if (discountCode.toUpperCase() === 'EMPLOYEE90' && isAnyEmployed) {
+    } else if (discountCode.toUpperCase() === "EMPLOYEE90" && isAnyEmployed) {
       return price * 0.9;
-    } else if (discountCode.toUpperCase() === 'NEWUSER75') {
+    } else if (discountCode.toUpperCase() === "NEWUSER75") {
       return price * 0.75;
     }
     return price;
