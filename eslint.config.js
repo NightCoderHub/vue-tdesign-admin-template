@@ -7,15 +7,6 @@ import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended"
 export default defineConfig([
   { files: ["**/*.{js,mjs,cjs,vue}"] },
   { files: ["**/*.{js,mjs,cjs,vue}"], languageOptions: { globals: globals.browser } },
-  // ---新增这部分来处理 Node.js 配置文件 ---
-  {
-    files: [".stylelintrc.js"], // 特別指定 .stylelintrc.js
-    languageOptions: {
-      globals: {
-        ...globals.node, // 启用 Node.js 全局变量 (module, require, exports 等)
-      },
-    },
-  },
   {
     files: ["**/*.{js,mjs,cjs,vue}"],
     plugins: { js },

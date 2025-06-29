@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   extends: ["stylelint-config-standard", "stylelint-config-html", "stylelint-config-recess-order", "stylelint-scss"],
   rules: {
     // 在此处添加或覆盖规则
