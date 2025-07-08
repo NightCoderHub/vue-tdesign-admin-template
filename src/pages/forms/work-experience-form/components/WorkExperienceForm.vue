@@ -57,12 +57,13 @@ const rules = workExperienceRules;
 
 <style scoped>
 .work-experience-item {
-  border: 1px dashed var(--td-component-border);
+  position: relative;
   padding: 15px;
   margin-bottom: 20px;
+  border: 1px dashed var(--td-component-border);
   border-radius: var(--td-radius-default);
-  position: relative;
 }
+
 .remove-btn {
   margin-top: 10px;
 }

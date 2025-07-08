@@ -155,7 +155,7 @@ watch(activeStyleTab, () => {
   padding: 20px;
   background-color: #fff;
   border-radius: 8px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px rgb(0 0 0 / 10%);
 }
 
 .search-area {
@@ -171,6 +171,7 @@ watch(activeStyleTab, () => {
   /* 恢复 min-height，不再需要固定高度用于虚拟滚动 */
   min-height: 300px;
   max-height: 600px;
+
   /* 允许内部滚动 */
   overflow-y: auto;
 }
@@ -183,36 +184,37 @@ watch(activeStyleTab, () => {
 }
 
 .icon-item {
+  /* 移除虚拟滚动所需的固定高度，让内容撑开 */
+
+  /* height: 100px; /* 如果需要，也可以保留，但不再是强制的 */
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 10px;
+  cursor: pointer;
+  user-select: none;
   border: 1px solid #eee;
   border-radius: 6px;
-  cursor: pointer;
   transition: all 0.2s ease-in-out;
-  user-select: none;
-  /* 移除虚拟滚动所需的固定高度，让内容撑开 */
-  /* height: 100px; /* 如果需要，也可以保留，但不再是强制的 */
-  box-sizing: border-box;
 }
 
 .icon-item:hover {
   border-color: var(--td-brand-color-7);
-  box-shadow: 0 0 8px rgba(var(--td-brand-color-7-rgb), 0.2);
+  box-shadow: 0 0 8px rgb(var(--td-brand-color-7-rgb), 0.2);
 }
 
 .icon-item.is-selected {
-  border-color: var(--td-brand-color);
   background-color: var(--td-brand-color-light);
-  box-shadow: 0 0 10px rgba(var(--td-brand-color-rgb), 0.3);
+  border-color: var(--td-brand-color);
+  box-shadow: 0 0 10px rgb(var(--td-brand-color-rgb), 0.3);
 }
 
 .icon-display {
+  margin-bottom: 8px;
   font-size: 36px;
   color: var(--td-text-color-primary);
-  margin-bottom: 8px;
 }
 
 .icon-item.is-selected .icon-display {

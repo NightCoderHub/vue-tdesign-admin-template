@@ -1,8 +1,6 @@
 export default {
   extends: ["stylelint-config-standard", "stylelint-config-html", "stylelint-config-recess-order", "stylelint-scss"],
   rules: {
-    // 在此处添加或覆盖规则
-    indentation: 2, // 示例：强制使用 2 个空格缩进
     "selector-pseudo-class-no-unknown": [
       true,
       {
@@ -20,7 +18,7 @@ export default {
     "at-rule-no-unknown": [
       true,
       {
-        ignoreAtRules: ["include", "mixin", "extend", "each", "if", "else", "for", "function", "return"], // SCSS 特有
+        ignoreAtRules: ["use", "include", "mixin", "extend", "each", "if", "else", "for", "function", "return"], // SCSS 特有
       },
     ],
     "property-no-unknown": [
@@ -29,8 +27,8 @@ export default {
         ignoreProperties: ["-webkit-touch-callout"], // 示例：如果你有特定的厂商前缀
       },
     ],
-    "value-no-vendor-prefix": null, // 如果你需要厂商前缀，则禁用此项
-    "custom-property-pattern": null, // 如果你不对 CSS 变量使用特定的命名约定，则禁用此项
-    "selector-class-pattern": null, // 如果你不对类名使用特定的命名约定，则禁用此项
+    "selector-class-pattern": null,
+    "rule-empty-line-before": "always-multi-line", // 规则前必须有空行
+    "no-descending-specificity": null, // 允许特定性下降
   },
 };

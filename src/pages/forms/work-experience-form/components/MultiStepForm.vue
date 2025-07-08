@@ -122,19 +122,21 @@ const handleDialogClose = () => {
 .multi-step-form {
   width: 100%;
   max-width: 800px;
-  margin: 0 auto;
   padding: 30px;
+  margin: 0 auto;
   background-color: var(--td-bg-color-container);
   border-radius: var(--td-radius-default);
   box-shadow: var(--td-shadow-1);
 }
+
 .form-navigation {
-  margin-top: 30px !important;
   display: flex;
   justify-content: flex-end;
+  margin-top: 30px !important;
 }
+
 .form-navigation .t-space {
-  width: 100%;
   justify-content: space-between;
+  width: 100%;
 }
 </style>

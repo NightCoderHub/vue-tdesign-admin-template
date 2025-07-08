@@ -75,12 +75,14 @@ const suggestCoursesByMajor = () => {
 
 <style scoped>
 .add-work-exp-btn {
-  margin-top: 10px;
   width: 100%;
+  margin-top: 10px;
 }
+
 .error-alert,
 .hint-alert {
   --form-label-width: 120px;
+
   margin-top: -16px;
   margin-bottom: 10px;
   margin-left: var(--form-label-width);

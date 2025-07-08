@@ -119,31 +119,37 @@ calculateAndSetTotalPrice();
 
 <style scoped>
 .section-title {
-  font-size: 16px;
   margin-bottom: 10px;
+  font-size: 16px;
   color: var(--td-text-color-primary);
 }
+
 .alert-message {
   margin-bottom: 15px;
 }
+
 .restricted-hint {
-  color: var(--td-error-color-5);
-  font-size: 0.85em;
   margin-left: 5px;
+  font-size: 0.85em;
+  color: var(--td-error-color-5);
 }
+
 .error-alert {
   margin-top: 10px;
   margin-bottom: 15px;
 }
+
 .summary {
-  margin-top: 20px;
-  border-top: 1px dashed var(--td-border-level-2-color);
   padding-top: 20px;
+  margin-top: 20px;
   text-align: left;
+  border-top: 1px dashed var(--td-border-level-2-color);
 }
+
 .summary .t-list {
   margin-bottom: 15px;
 }
+
 .total-price {
   font-size: 20px;
   font-weight: bold;
