@@ -12,7 +12,8 @@ export default defineConfig([
     plugins: { js },
     extends: ["js/recommended"],
     rules: {
-      "no-console": ["error", { allow: ["error", "warn", "info"] }],
+      // "no-console": ["error", { allow: ["error", "warn", "info"] }],
+      "no-console": 0,
     },
   },
   pluginVue.configs["flat/recommended"],
