@@ -27,7 +27,6 @@ export const createRetryInterceptor = (instance, options = {}) => {
     (response) => response,
     (error) => {
       const config = error.config;
-
       // 如果请求被取消了，直接抛出
       if (axios.isCancel(error)) {
         return Promise.reject(error);
