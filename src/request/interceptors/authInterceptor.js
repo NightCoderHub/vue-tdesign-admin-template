@@ -11,7 +11,7 @@ let refreshTokenPromise = null;
 // 用于刷新 token 的独立 Axios 实例，避免循环依赖
 // 确保这个实例不被其他拦截器（尤其是authInterceptor本身）再次拦截，以防死循环
 const refreshInstance = axios.create({
-  baseURL: "http://localhost:3000/api", // 你的 API 基础路径
+  baseURL: "http://localhost:3000", // 你的 API 基础路径
   timeout: 5000, // 刷新 token 的超时时间
 });
 
@@ -27,9 +27,9 @@ async function callRefreshTokenAPI() {
       throw new Error("❌ 没有找到 Refresh Token，请重新登录。");
     }
 
-    const response = await refreshInstance.post("/auth/refreshToken", { refreshToken });
-    const { accessToken, refreshToken: newRefreshToken } = response.data;
+    const response = await refreshInstance.post("/oauth2/refresh-token", { refreshToken });
 
+    const { access_token: accessToken, refresh_token: newRefreshToken } = response.data.data;
     // 更新本地存储的 Token
     localStorage.setItem("accessToken", accessToken);
     localStorage.setItem("refreshToken", newRefreshToken);
@@ -60,15 +60,12 @@ function addRequestToQueue(resolve, reject, config) {
  * 解决所有等待中的请求，使用新的 Access Token 重新发起它们
  * @param {string} newAccessToken - 新获取的 Access Token
  */
-function resolvePendingRequests(newAccessToken) {
+function resolvePendingRequests(instance, newAccessToken) {
   failedQueue.forEach((promise) => {
     // 更新原始请求的配置，然后重新发起
     promise.config.headers["Authorization"] = `Bearer ${newAccessToken}`;
-    // 使用原始的 axios 实例来重试请求
-    // 注意: 这里的 `axios` 是指通常导入的 axios 顶级对象，而不是我们配置的 `instance`
-    // 因为我们可能需要一个干净的实例来重试，或者简单地使用传入的 instance 参数
-    // 假设这里将使用在 createAuthInterceptor 中传入的 instance
-    promise.resolve(axios(promise.config));
+    // 使用instance实例来重试请求
+    promise.resolve(instance(promise.config));
   });
   failedQueue = []; // 清空队列
 }
@@ -93,11 +90,10 @@ export const createAuthInterceptor = (instance) => {
     async (error) => {
       const originalRequest = error.config;
       const status = error.response?.status;
-
       // 1. 如果是 401 错误
       // 2. 并且不是刷新 Token 自身的请求 (避免死循环)
       // 3. 并且这个请求之前没有被重试过 (防止无限重试)
-      if (status === 401 && originalRequest.url !== "/auth/refreshToken" && !originalRequest._retry) {
+      if (status === 401 && originalRequest.url !== "/oauth2/refresh-token" && !originalRequest._retry) {
         originalRequest._retry = true; // 标记为已重试，防止第二次进入这个逻辑
 
         // 如果当前没有正在刷新 Token 的过程
@@ -108,7 +104,7 @@ export const createAuthInterceptor = (instance) => {
 
           refreshTokenPromise
             .then((newAccessToken) => {
-              resolvePendingRequests(newAccessToken); // 成功后解决所有等待的请求
+              resolvePendingRequests(instance, newAccessToken); // 成功后解决所有等待的请求
             })
             .catch((err) => {
               rejectPendingRequests(err); // 失败后拒绝所有等待的请求
