@@ -3,10 +3,11 @@
 import axios from "axios";
 import { createAuthInterceptor } from "./interceptors/authInterceptor";
 import { createRaceConditionInterceptor, clearAllPendingRequests } from "./interceptors/raceConditionInterceptor";
-import { createRetryInterceptor } from "./interceptors/retryInterceptor"; // 引入重试拦截器
+import { createRetryInterceptor } from "./interceptors/retryInterceptor";
 
+const API_SUCCESS_CODE = 200;
 const instance = axios.create({
-  baseURL: "http://localhost:3000/api", // 你的 API 基础 URL
+  baseURL: "http://localhost:3000", // API 基础 URL
   timeout: 15000, // 通用请求超时时间
   headers: {
     "Content-Type": "application/json",
@@ -72,7 +73,13 @@ instance.interceptors.response.use(
 
 // 4. 通用错误日志拦截器 (最后处理所有未被特定处理的错误)
 instance.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    if (response?.data?.code === API_SUCCESS_CODE) {
+      return response.data.data;
+    } else {
+      throw new Error(`请求接口错误, 错误码: ${response.data.code}`);
+    }
+  },
   (error) => {
     // 确保不是 AbortError (请求取消)
     if (!axios.isCancel(error)) {
