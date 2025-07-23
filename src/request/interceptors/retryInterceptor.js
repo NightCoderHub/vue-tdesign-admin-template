@@ -1,5 +1,6 @@
 // interceptors/retryInterceptor.js
 import axios from "axios";
+
 /**
  * 创建并返回一个处理请求重试的响应拦截器。
  * 这个拦截器应该被添加到 Axios 实例中。
@@ -23,7 +24,7 @@ export const createRetryInterceptor = (instance, options = {}) => {
   const opts = { ...defaultOptions, ...options };
 
   instance.interceptors.response.use(
-    (response) => response, // 成功响应直接通过
+    (response) => response,
     (error) => {
       const config = error.config;
 
@@ -31,7 +32,6 @@ export const createRetryInterceptor = (instance, options = {}) => {
       if (axios.isCancel(error)) {
         return Promise.reject(error);
       }
-
       // 检查是否需要重试
       if (opts.shouldRetry(error)) {
         // 初始化重试计数，如果不存在则设为 0
