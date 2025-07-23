@@ -85,15 +85,21 @@ function rejectPendingRequests(error) {
  * @param {AxiosInstance} instance - 要应用拦截器的 Axios 实例
  */
 export const createAuthInterceptor = (instance) => {
+  // 定义一个数组来存储不需要进行 token 刷新判断的 URL
+  const excludeUrls = ["/oauth2/refresh-token", "/api/permissions", "/user/info", "/get-menu-list"];
+
   instance.interceptors.response.use(
     (response) => response, // 成功响应直接通过
     async (error) => {
       const originalRequest = error.config;
       const status = error.response?.status;
+
+      // 检查 originalRequest.url 是否包含在 excludeUrls 数组中
+      const isExcludedUrl = excludeUrls.some((url) => originalRequest.url.includes(url));
       // 1. 如果是 401 错误
-      // 2. 并且不是刷新 Token 自身的请求 (避免死循环)
+      // 2. 并且不是排除的 URL (避免死循环或不必要的刷新)
       // 3. 并且这个请求之前没有被重试过 (防止无限重试)
-      if (status === 401 && originalRequest.url !== "/oauth2/refresh-token" && !originalRequest._retry) {
+      if (status === 401 && !isExcludedUrl && !originalRequest._retry) {
         originalRequest._retry = true; // 标记为已重试，防止第二次进入这个逻辑
 
         // 如果当前没有正在刷新 Token 的过程
