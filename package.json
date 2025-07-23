@@ -11,8 +11,6 @@
     "prepare": "husky",
     "lint:fix": "eslint --ext .vue,.js,jsx ./ --max-warnings 0 --fix",
     "lint-staged": "lint-staged",
-    "stylelint": "stylelint \"**/*.{vue,html,css,scss}\" --ignore-path .gitignore",
-    "stylelint:fix": "stylelint \"**/*.{vue,html,css,scss}\" --fix --ignore-path .gitignore",
     "commit": "cz",
     "release": "standard-version",
     "release:minor": "standard-version --release-as minor",
@@ -61,11 +59,6 @@
     "rollup-plugin-visualizer": "^6.0.1",
     "sass": "^1.86.2",
     "standard-version": "^9.5.0",
-    "stylelint": "^16.21.0",
-    "stylelint-config-html": "^1.1.0",
-    "stylelint-config-recess-order": "^7.1.0",
-    "stylelint-config-standard": "^38.0.0",
-    "stylelint-scss": "^6.12.1",
     "terser": "^5.40.0",
     "unplugin-auto-import": "^19.3.0",
     "unplugin-vue-components": "^28.7.0",
@@ -76,8 +69,7 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,vue,json,css,scss,less,html,md}": "prettier --write",
-    "*.{js,jsx,ts,tsx,vue}": "pnpm lint:fix",
-    "*.{vue,html,css,scss}": "pnpm stylelint:fix"
+    "*.{js,jsx,ts,tsx,vue}": "pnpm lint:fix"
   },
   "config": {
     "commitizen": {
